@@ -1,0 +1,48 @@
+<div>
+    <span users-ctrl-delegate>
+        <div layout="row" layout-wrap layout-align="center">
+            <searchform flex-offset-lg="5"></searchform>
+            <div layout="row" flex-gt-lg="75" flex-lg="75" flex-md="70" flex-sm="45" flex-xs="90" layout-wrap layout-align-sm="center">
+                <user-panel ng-repeat="user in usersCtrl.users |limitTo:15|excludeself" user="user" joinlist="usersCtrl.joinGamesArr(user.games)" id="{{user._id}}"></user-panel>
+                <p class="not-found-text" ng-if="usersCtrl.users.length == 0"><br><md-icon class="not-found-text" class="material-icons">error_outline</md-icon> &nbsp; No users were found.</p>
+            </div>
+        </div>
+        <users-pagination class="users-pagination"></users-pagination>
+    </span>
+</div>
+<!--<span users-ctrl-delegate><menu></menu>
+<div layout="row" layout-wrap layout-margin>
+    <searchform ></searchform>
+    <div layout="row" flex-gt-lg="75" flex-lg="65" flex-md="45" flex-sm="100" layout-wrap layout-align-sm="center">
+        <user-panel ng-repeat="user in usersCtrl.users
+                        |excludeself
+                        |filter:{personal:{country:usersCtrl.country, language:usersCtrl.language, gender: usersCtrl.gender, communication: usersCtrl.communication}}
+                        |filter:{general:{region:usersCtrl.geoRegion}}
+                        |filter:{general:{intent:usersCtrl.lookingfor}}
+                        |filter:{dota:{serverregion:usersCtrl.serverRegion}}
+                        |filter:{dota:{mode:usersCtrl.typeOfPlay}}
+                        |filter:{dota:{position:usersCtrl.preferredPosition}}
+                        |filter:{dota:{rank:{partymmr:usersCtrl.partyNumber,solommr: usersCtrl.soloNumber}}}
+                        |filter:{csgo:{rank:usersCtrl.csgoLeague}}
+                        |filter:{csgo:{mode:usersCtrl.csgoTypeOfPlay}}
+                        |filter:{csgo:{howlong:usersCtrl.csgoExperience}}
+                        |filter:{csgo:{role:usersCtrl.csgoPosition}}
+                        |filterAgeByRange:usersCtrl.ageRange
+                        |filterGender: usersCtrl.gender|startFrom:argsarr|limitTo:15" user="user" joinlist="usersCtrl.joinGamesArr(user.games)" id="{{user._id}}"></user-panel>
+    </div>
+</div>
+<users-pagination></users-pagination>
+</span>-->
+<!-- angular ng-repeat native filter requires that the object deep levels exist or it will not filter properly -->
+
+
+
+
+<!--<div ng-repeat="user in usersCtrl.users|excludeself" ng-class="($index % 4 == 0)? 'col-xs-3' : 'col-xs-3'">
+    <user-panel user="user" highlight-class="highlight-panel" joinlist="usersCtrl.joinGamesArr(user.games)" id="{{user._id}}"></user-panel>
+</div>-->
+
+
+
+
+<!-- remember class highlight-panel for userpanel -->

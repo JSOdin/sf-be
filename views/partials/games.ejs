@@ -1,0 +1,32 @@
+<!--
+<div games-ctrl-delegate><menu opacity="gamesCtrl.apps" modelcopy="search" id="top"></menu>
+-->
+
+<div games-ctrl-delegate>
+        <!--
+        <spinner name="mySpinner" show="loading" img-src on-loaded="spinnerLoaded(spinnerApi)">
+        </spinner>-->
+
+
+    <div layout="row" layout-align="center" >
+        <md-input-container flex-lg="35" flex-xl="35" flex-md="40" flex-sm="60" flex-xs="80" md-no-float class="game-input">
+            <input style="color:white;" class="form-control" id="focusedInput" ng-model="search" type="text" placeholder="Enter game name here - Search for recent players in the directory" ng-focus ng-trim="false" ng-model-options="{debounce:1000}">  <!-- search.$ means search by all fields -->
+        </md-input-container>
+    </div>
+
+    <div layout="row" layout-align="center">
+        <div layout="row" flex="80" layout-wrap layout-padding layout-margin layout-align="center">
+            <game-panel class="game-repeat-blocks" game="game" index="$index" ng-repeat="game in gamesCtrl.apps|filter:search.name| startFrom:argsarr|limitTo:16" gamename="{{game.name}}"></game-panel>
+            <div ng-if="nogames" style="text-align:center; margin-bottom: 35px;">
+                <p class="not-found-text" ><br><md-icon class="not-found-text" class="material-icons">error_outline</md-icon> &nbsp; No Games were found.</p>
+                <md-button ng-click="gamesCtrl.suggestGame($event)" class="md-accent md-raised">
+                    <md-tooltip>
+                        Couldn't find your game? Suggest one so we can add it to our list!
+                    </md-tooltip>
+                    Click here to suggest a new game.
+                </md-button>
+            </div>
+        </div>
+    </div>
+    <pagination></pagination>
+</div>

@@ -1,0 +1,423 @@
+<div style="position:fixed; width: 30%; left: 35%; top:10%; z-index:10000;" ng-if="wantsCtrl.messagemodalAppear">   <!-- ng-show as opposed to ng-if because ng-if reruns the controller code since it removes stuff from the DOM -->
+    <div layout-gt-md="row" layout-align-gt-md="center" class="wants-form-wrap" >
+        <div flex="100" class="md-whiteframe-9dp user-posts" layout="column" layout-margin layout-padding>
+            <div layout="row" layout-align="space-between">
+                <h3 >Send a message to <span class="wants-reddit-message-h3">{{wantsCtrl.steamusername}}</span> on reddit</h3>
+                <div><md-icon class="wants-reddit-message-close" ng-click="wantsCtrl.closeredditbox()">clear</md-icon></div>
+            </div>
+
+            <h2 class="" style="margin-bottom:0;">Subject<span style="color:red;"> * required</span></h2>
+            <div layout="row" style="margin-top:0;">
+                <input flex="100" type="text" class="user-posts-input" ng-model="wantsCtrl.redditsubject"/>
+            </div>
+            <h2 class="" style="margin-bottom:0;">Body<span style="color:red;"> * required</span></h2>
+            <div layout="row" style="margin-top:0;">
+                <textarea flex="100" type="text" class="user-posts-input" ng-model="wantsCtrl.redditmessage"></textarea>
+            </div>
+            <div layout="row" layout-align="start">
+                <div flex="100" id="g-recaptcha" recaptcha key="'6LfkLBYTAAAAAKCsb0DxW-pHs8lHedb6OPa__SSW'"></div>
+            </div>
+            <div layout="row" layout-align="space-between">
+                <div class="reddit-message-toast-box">
+
+                </div>
+                <md-button class="md-raised" ng-click="wantsCtrl.submitredditmessage()">Submit</md-button>
+            </div>
+        </div>
+    </div>
+</div>
+<div  class="md-whiteframe-9dp user-posts user-fullpost-modal" ng-if="wantsCtrl.fullpostmodalAppear">
+    <div layout-gt-md="row" layout-align-gt-md="center" class="wants-form-wrap wants-fullpost-modal" >
+        <div flex="100" style="height:550px;" layout="column" layout-margin>
+            <div layout="row" layout-align="space-between" flex="none">                                                                <!-- flex="none" for the emergency fix for Angular-mat 1.0.0 through 1.0.4 due to flexbox bug in chrome. do it for all elements with a non-definite flex value.-->
+                <p flex="none" class="user-posts-time">{{wantsCtrl.currentfullpost.submittedOn | formatAgo}}</p>
+                <div flex="none"><md-icon class="wants-reddit-message-close" ng-click="wantsCtrl.closeredditbox()">clear</md-icon></div>
+            </div>
+            <div layout="row" flex="none">
+                <div flex="none">
+                    <md-button class="md-raised user-posts-action-btn" ng-click="wantsCtrl.sendreddit(wantsCtrl.currentfullpost.reddit, wantsCtrl.currentfullpost.author)" ng-if="wantsCtrl.currentfullpost.reddit">
+                        <md-icon class="icon-reddit-alien"></md-icon><span>Reply via reddit</span>
+                    </md-button>
+                </div>
+                <div flex="none">
+                    <md-button class="md-raised user-posts-action-btn" ng-href="{{'steam://friends/add/'+post.steamid}}">
+                        <md-icon class="icon-steam"></md-icon><span>Add on Steam</span>
+                    </md-button>
+                </div>
+
+                <!-- <md-button class="md-raised user-posts-action-btn">
+                     <md-icon class="icon-envelope"></md-icon><span>Send email</span>
+                 </md-button>-->
+            </div>
+            <div layout="row" class="wants-fullpost-header-wrap" flex="none">
+                <h3 flex="none" class="wants-fullpost-h3" style="word-wrap: break-word;">{{wantsCtrl.currentfullpost.author}} <span>wants to play</span></h3>
+            </div>
+            <div layout="row" flex="none">
+                <p class="user-posts-personal user-full-posts-personal" flex="none">
+                    {{wantsCtrl.currentfullpost.country}}<span ng-if="wantsCtrl.currentfullpost.country && (wantsCtrl.currentfullpost.birthdate || wantsCtrl.currentfullpost.gender || wantsCtrl.currentfullpost.language || wantsCtrl.currentfullpost.region)"> &middot; </span>{{wantsCtrl.currentfullpost.birthdate | ageFilter}} {{wantsCtrl.currentfullpost.gender}}<span ng-if="(wantsCtrl.currentfullpost.birthdate || wantsCtrl.currentfullpost.gender) && (wantsCtrl.currentfullpost.language || wantsCtrl.currentfullpost.region)"> &middot; </span>{{wantsCtrl.currentfullpost.language}}<span ng-if="wantsCtrl.currentfullpost.language && wantsCtrl.currentfullpost.region"> &middot; </span>{{wantsCtrl.currentfullpost.region}}
+                </p>
+            </div>
+            <div layout="row" flex="none">
+                <div layout="column" flex-gt-lg="20" flex-lg="25" style="margin-right: 5px;" ng-repeat="app in wantsCtrl.currentfullpost.apps">
+                    <img src="{{'http://cdn.akamai.steamstatic.com/steam/apps/'+app.appid+'/header.jpg'}}" fallback-src="/images/fallback.jpg" style="width:100%; min-height:1px;"/>
+                    <p class="user-posts-game-name">
+                        {{app.name}}
+                    </p>
+                </div>
+            </div>
+            <div layout="row" flex="none">
+                <p flex="100" class="user-posts-text">{{wantsCtrl.currentfullpost.text}}</p>
+            </div>
+            <div layout="row" flex="none">
+                <h3 class="wants-full-post-game-specifics-h3">Communication preferences</h3>
+            </div>
+            <div layout="column" style="margin-bottom: 10px;" flex="none">
+                <div layout="column" class="user-posts-game-specific-fields">
+                    <div layout="column" ng-repeat="communication in wantsCtrl.currentfullpost.communications" layout-align="space-between" >
+                        {{communication}}
+                    </div>
+                </div>
+            </div>
+
+            <div layout="row" flex="none">
+                <h3 class="wants-full-post-game-specifics-h3">Game preferences</h3>
+            </div>
+
+            <div layout="column" style="margin-bottom: 10px;" flex="none">
+                <div layout="column" class="user-posts-game-specific-fields">
+                    <div layout="column" ng-repeat="game in wantsCtrl.currentfullpost.apps" layout-align="space-between" >
+                        <h3 class="user-posts-game-specific-fields-h3">{{game.name}}</h3>
+                        <div layout="column" layout-wrap class="user-posts-game-specific-fields-input-wrapper">
+                            <h5 ng-if="!game.fields" class="wants-fullpost-h5">
+                                I'm up for anything!
+                            </h5>
+                            <div ng-repeat="(key,array) in game.fields" layout="column" class="wants-full-post-game-specific-items"> <!-- fieldoptions or fields if fieldoptions doesnt exist (usually when selecting a new game not in post.-->
+
+                                <h2>{{key}}</h2>
+                                <p ng-repeat="item in array">
+                                    {{item}}
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row" layout-align="center">
+
+            </div>
+            <div layout="row" layout-align="center" style="margin-bottom: 25px; margin-top: 25px;">
+                <!-- userpostmodal -->
+                <adsense class="adsbygoogle"
+                         inline-style="display:inline-block;width:728px;height:90px;"
+                         ad-client="ca-pub-3088381454752155"
+                         ad-slot="7220995625"
+                         data-ad-format="auto"></adsense>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<div layout-gt-md="row" layout-align-gt-md="center" class="wants-form-wrap">
+    <div flex-gt-lg="90" flex-lg="90" layout-gt-md="row" layout-md="row" layout-align="center">
+        <div flex-gt-lg="45" flex-lg="45" flex-md="45" layout-margin class="md-whiteframe-3dp user-posts-search-left" layout="column" >
+            <!-- **** row of buttons **** -->
+            <div layout="row" layout-margin style="background-color:rgba(66,66,66,0.9); margin:0; color:white;">
+                <h1 style="font-size:1.2em;"><md-icon>create</md-icon>Looking for friends - user posts</h1>
+            </div>
+            <div layout="row" layout-align="start">
+                <div>
+                    <md-button class="md-raised" ng-click="wantsCtrl.toggleMinimize()" ng-if="!wantsCtrl.minimizeState">
+                        <md-icon class="icon-arrow-left"></md-icon>Minimize
+                    </md-button>
+                    <md-button class="md-raised" ng-click="wantsCtrl.toggleMinimize()" ng-if="wantsCtrl.minimizeState">
+                        Expand  <md-icon class="icon-arrow-right"></md-icon>
+                    </md-button>
+                </div>
+                <div>
+                    <md-button class="md-raised" ng-click="wantsCtrl.toggleAdditional()" ng-if="!wantsCtrl.minimizeState">
+                        <md-icon class="material-icons">add</md-icon> Toggle Additional options
+                    </md-button>
+                </div>
+            </div>
+            <!-- **** buttons end **** -->
+
+            <div layout="row" layout-align="start">
+                <p layout-margin>
+                    Forward all your concerns and bug reports to <a href="http://steamcommunity.com/id/benoit3000/" target="_blank">http://steamcommunity.com/id/benoit3000</a>
+                </p>
+            </div>
+
+            <!-- **** main search form **** -->
+            <div class="md-padding" layout="column" ng-if="!wantsCtrl.minimizeState" layout-align="stretch">
+
+                <div layout="column">
+                    <h2 class="">Game<span> - (select up to three)</span></h2>
+                    <md-chips ng-model="wantsCtrl.selectedGames" md-autocomplete-snap="" md-transform-chip="wantsCtrl.transformChip($chip)" md-require-match="wantsCtrl.autocompleteDemoRequireMatch" md-on-add="wantsCtrl.addCount('game')" md-on-remove="wantsCtrl.deleteCount('game')" placeholder="All">
+                        <md-autocomplete md-selected-item="wantsCtrl.selectedItemGame" md-search-text="wantsCtrl.searchTextGame" md-items="item in wantsCtrl.querySearch(wantsCtrl.searchTextGame, wantsCtrl.games)" md-item-text="item.display" placeholder="Type and select item" ng-disabled="(wantsCtrl.chipCount['game'] >= 3)">
+                            <span md-highlight-text="wantsCtrl.searchTextGame">{{item.display}}</span>
+                        </md-autocomplete>
+
+                        <md-chip-template>
+                            <span>
+                              <strong>{{$chip.display}}</strong>
+                                <!--       <em>({{$chip.type}})</em>-->
+                            </span>
+                        </md-chip-template>
+
+                    </md-chips>
+
+
+                    <h2 class="">Region<span> - (select up to three)</span></h2>
+                    <md-chips ng-model="wantsCtrl.selectedRegions" md-autocomplete-snap="" md-transform-chip="wantsCtrl.transformChip($chip)" md-require-match="wantsCtrl.autocompleteDemoRequireMatch" md-on-add="wantsCtrl.addCount('region')" md-on-remove="wantsCtrl.deleteCount('region')" >
+                        <md-autocomplete md-selected-item="wantsCtrl.selectedItemRegion" md-search-text="wantsCtrl.searchTextRegion" md-items="item in wantsCtrl.querySearch(wantsCtrl.searchTextRegion, wantsCtrl.regions)" md-item-text="item.display" placeholder="Type and select item (e.g. NA, EU)" ng-disabled="(wantsCtrl.chipCount['region'] >= 3)" md-min-length="1">
+                            <span md-highlight-text="wantsCtrl.searchTextRegion">{{item.display}}</span>
+                        </md-autocomplete>
+                        <md-chip-template>
+                            <span>
+                              <strong>{{$chip.display}}</strong>
+                                <!--      <em>{{$chip.type}}</em>-->
+                            </span>
+                        </md-chip-template>
+                    </md-chips>
+                    <h2 class="">Age</h2>
+                    <div layout="row" layout-align="start">
+                        <input flex="10" class="user-posts-input-age" ng-model="wantsCtrl.agelow"/>
+                        <p class="user-post-between-age">To</p>
+                        <input flex="10" class="user-posts-input-age" ng-model="wantsCtrl.agehigh"/>
+                    </div>
+                </div>
+                <div layout="row" layout-align="space-between" style="margin-top:20px;" >
+                    <div class="user-posts-bot-btns" >
+                        <md-button style="margin-left: 0 !important;" class="md-accent md-raised" ng-if="wantsCtrl.haspost" ng-click="wantsCtrl.bumpPost()">Bump your post</md-button>
+                        <md-button style="margin-left: 0 !important;" class="md-primary md-raised" ng-if="!wantsCtrl.haspost" ng-click="wantsCtrl.openForm()">Make a post</md-button>
+                        <md-button style="margin-left: 0 !important;" class="md-accent md-raised" ng-click="wantsCtrl.managePost()" ng-if="!wantsCtrl.loggedin || wantsCtrl.haspost">Manage your post</md-button>
+                    </div>
+                    <div class="user-posts-bot-btns" layout="row" layout-align="end end">
+                        <md-button class="md-primary md-raised" ng-click="wantsCtrl.resetFields()">
+                            Reset fields
+                        </md-button>
+                        <md-button style="margin-right:0 !important;" class="md-primary md-raised" ng-click="wantsCtrl.filterPosts()">
+                            Filter
+                        </md-button>
+                    </div>
+                </div>
+
+            </div>
+            <!-- **** main search form end **** -->
+        </div>
+        <div flex-gt-lg="45" flex-lg="45" flex-md="45" layout-margin class="md-whiteframe-3dp user-posts-search-left" layout="column" ng-show="wantsCtrl.minimizeAdditionalState">
+            <md-tabs md-dynamic-height md-border-bottom class="md-padding" layout="column" ng-show="!wantsCtrl.minimizeState">
+                <md-tab label="General">
+                    <h2 class="">  Language<span> - (select up to three)</span></h2>
+                    <md-chips ng-model="wantsCtrl.selectedLanguages" md-autocomplete-snap="" md-transform-chip="wantsCtrl.transformChip($chip)" md-require-match="wantsCtrl.autocompleteDemoRequireMatch"  md-on-add="wantsCtrl.addCount('language')" md-on-remove="wantsCtrl.deleteCount('language')" >
+                        <md-autocomplete md-selected-item="wantsCtrl.selectedItemLanguage" md-search-text="wantsCtrl.searchTextLanguage" md-items="item in wantsCtrl.querySearch(wantsCtrl.searchTextLanguage, wantsCtrl.languages)" md-item-text="item.display" placeholder="Type and select item" ng-disabled="(wantsCtrl.chipCount['language'] >= 3)" md-min-length="1">
+                            <span md-highlight-text="wantsCtrl.searchTextLanguage">{{item.display}}</span>
+                        </md-autocomplete>
+                        <md-chip-template>
+                        <span>
+                          <strong>{{$chip.display}}</strong>
+                            <!--      <em>{{$chip.type}}</em>-->
+                        </span>
+                        </md-chip-template>
+                    </md-chips>
+                    <h2 class="">  Communication preference<span> - (select up to three)</span></h2>
+                    <md-chips ng-model="wantsCtrl.selectedCommunications" md-autocomplete-snap="" md-transform-chip="wantsCtrl.transformChip($chip)" md-require-match="wantsCtrl.autocompleteDemoRequireMatch"  md-on-add="wantsCtrl.addCount('communication')" md-on-remove="wantsCtrl.deleteCount('communication')" >
+                        <md-autocomplete md-selected-item="wantsCtrl.selectedItemCommunication" md-search-text="wantsCtrl.searchTextCommunication" md-items="item in wantsCtrl.querySearch(wantsCtrl.searchTextCommunication, wantsCtrl.communications)" md-item-text="item.display" placeholder="Type and select item" ng-disabled="(wantsCtrl.chipCount['communication'] >= 3)" md-min-length="1">
+                            <span md-highlight-text="wantsCtrl.searchTextCommunication">{{item.display}}</span>
+                        </md-autocomplete>
+                        <md-chip-template>
+                        <span>
+                          <strong>{{$chip.display}}</strong>
+                        </span>
+                        </md-chip-template>
+                    </md-chips>
+                    <h2 class="">  Country<span> - (select up to three)</span></h2>
+                    <md-chips ng-model="wantsCtrl.selectedCountries" md-autocomplete-snap="" md-transform-chip="wantsCtrl.transformChip($chip)" md-require-match="wantsCtrl.autocompleteDemoRequireMatch"  md-on-add="wantsCtrl.addCount('country')" md-on-remove="wantsCtrl.deleteCount('country')" >
+                        <md-autocomplete md-selected-item="wantsCtrl.selectedItemCountry" md-search-text="wantsCtrl.searchTextCountry" md-items="item in wantsCtrl.querySearch(wantsCtrl.searchTextCountry, wantsCtrl.countries)" md-item-text="item.display" placeholder="Type and select item" ng-disabled="(wantsCtrl.chipCount['country'] >= 3)" md-min-length="1">
+                            <span md-highlight-text="wantsCtrl.searchTextCountry">{{item.display}}</span>
+                        </md-autocomplete>
+                        <md-chip-template>
+                        <span>
+                          <strong>{{$chip.display}}</strong>
+                            <!--      <em>{{$chip.type}}</em>-->
+                        </span>
+                        </md-chip-template>
+                    </md-chips>
+                    <div layout="column" layout-padding>
+
+                    </div>
+                </md-tab>
+
+                <md-tab label="Game Specific" ng-if="wantsCtrl.selectedGames.length > 0 && wantsCtrl.selectedGames[0].value !=='all'">
+
+                    <h2 class="">Game-specific filters<span> - (click on a game to reveal additional options)</span></h2>
+
+             <!--       <div layout="row" ng-if="!wantsCtrl.stateGameFields">
+                        <md-button class="md-raised" ng-click="wantsCtrl.toggleGameFields()">Show</md-button>
+                    </div>
+                    <div layout="row" ng-if="wantsCtrl.stateGameFields">
+                        <md-button class="md-raised" ng-click="wantsCtrl.toggleGameFields()">Hide</md-button>
+                    </div>-->
+
+
+                    <div layout="column" class="user-posts-game-specific-fields">
+                        <div layout="column" ng-repeat="game in wantsCtrl.selectedGames" layout-align="space-between">
+                            <label for="{{game.appid+'dropdown'}}"><h4 class="user-posts-game-specific-fields-h4" style="width: 50%;"><md-icon>add</md-icon><input class="game-fields-dropdown" type="checkbox" id="{{game.appid+'dropdown'}}" ng-model="wantsCtrl[game.appid]"/> {{game.display}}</h4></label>
+
+                            <div ng-if="wantsCtrl[game.appid]">
+                                <div layout="row" layout-wrap class="user-posts-game-specific-fields-input-wrapper" >
+                                    <div flex="100" ng-repeat="(key,array) in game.fields" layout="column">
+                                        <h2>{{key}}<span> - (You can select multiple options)</span></h2>
+                                        <md-select ng-model="wantsCtrl.selectedGameFields[game.appid][key]" class="user-posts-form-select" multiple="true">
+                                            <md-tooltip>
+                                                Selected options are highlighted.
+                                            </md-tooltip>
+                                            <md-option ng-repeat="option in array" value="{{option}}" >
+                                                {{option}}
+                                            </md-option>
+                                        </md-select>
+                                    </div>
+                                </div>
+                                <h2>Attitude<span> - (You can select multiple options)</span></h2>
+                                <md-select ng-model="wantsCtrl.selectedGameFields[game.appid]['Attitude']" class="user-posts-form-select" multiple="true">
+                                    <md-tooltip>
+                                        Selected options are highlighted.
+                                    </md-tooltip>
+                                    <md-option ng-repeat="option in ['I mess around in game and do random things to have fun','I am focused on learning the game and constantly improving myself to succeed','I expect those around me to try their best']" value="{{option}}" >
+                                        {{option}}
+                                    </md-option>
+                                </md-select>
+                                <h2>Skill Level<span> - (You can select multiple options)</span></h2>
+                                <md-select ng-model="wantsCtrl.selectedGameFields[game.appid]['Skill Level']" class="user-posts-form-select" multiple="true">
+                                    <md-tooltip>
+                                        Selected options are highlighted.
+                                    </md-tooltip>
+                                    <md-option ng-repeat="option in ['I just started playing or I\'m still trying to grasp basics of the game','I\'ve played for a while and am familiar with the game but still have much to improve on','I consider myself a veteran','I\'m an expert at the game']" value="{{option}}" >
+                                        {{option}}
+                                    </md-option>
+                                </md-select>
+                            </div>
+                        </div>
+                    </div>
+                </md-tab>
+            </md-tabs>
+
+
+                <!--<h2 class="">  Genre (select up to three)</h2>
+                <md-chips ng-model="wantsCtrl.selectedGenres" md-autocomplete-snap="" md-transform-chip="wantsCtrl.transformChip($chip)" md-require-match="wantsCtrl.autocompleteDemoRequireMatch"  md-on-add="wantsCtrl.addCount('genre')" md-on-remove="wantsCtrl.deleteCount('genre')" >
+                    <md-autocomplete md-selected-item="wantsCtrl.selectedItemGenre" md-search-text="wantsCtrl.searchTextGenre" md-items="item in wantsCtrl.querySearch(wantsCtrl.searchTextGenre, wantsCtrl.genres)" md-item-text="item.display" placeholder="Type and select item" ng-disabled="(wantsCtrl.chipCount['genre']== 3)">
+                        <span md-highlight-text="wantsCtrl.searchTextGenre">{{item.display}}</span>
+                    </md-autocomplete>
+                    <md-chip-template>
+                        <span>
+                          <strong>{{$chip.display}}</strong>
+                            &lt;!&ndash;      <em>{{$chip.type}}</em>&ndash;&gt;
+                        </span>
+                    </md-chip-template>
+                </md-chips>-->
+
+        </div>
+
+    </div>
+</div>
+<div layout="row" layout-align="center" style="margin-bottom: 25px; margin-top: 25px;">
+   <!--belowuserpostsform -->
+    <adsense class="adsbygoogle"
+         inline-style="display:inline-block;width:728px;height:90px"
+         ad-client="ca-pub-3088381454752155"
+         ad-slot="1453663621"
+         data-ad-format="auto"></adsense>
+</div>
+<div ng-if="wantsCtrl.posts.length==0" style="text-align:center; margin-bottom: 35px;">
+    <p class="not-found-text" ><br><md-icon class="not-found-text" class="material-icons">error_outline</md-icon> &nbsp; No Posts were found.</p>
+</div>
+<div layout-gt-md="row" layout-align-gt-md="center" layout-align-md="center" class="wants-form-wrap" ng-repeat="post in wantsCtrl.posts" id="user-posts-section">
+    <div flex-gt-lg="90" flex-lg="90" layout-gt-md="row" layout-md="row" layout-align="center">
+        <div flex-gt-lg="65" flex-lg="75" flex-md="90" layout-margin class="md-whiteframe-9dp user-posts" layout="column" layout-margin>
+            <div layout="row" layout-align="space-between">
+                <p class="user-posts-time">{{post.submittedOn | formatAgo}}</p>
+                <p ><a ng-click="wantsCtrl.openfullpost(post)" class="user-posts-full-link">View full post</a></p>
+            </div>
+
+            <div layout="row" layout-xs="column">
+                <!-- <div flex="10">
+                     <img style="width:100%" ng-src="/images/fallbackavatar.jpg"/>
+                 </div>-->
+
+                <div flex="80" flex-sm="70" layout="column">
+                    <div layout="row" layout-sm="column" layout-xs="column">
+                        <div flex-gt-sm="30" layout="column">
+                            <div layout="row" class="user-posts-action" layout-align="start center">
+                                <div>
+                                    <h3 style="word-wrap: break-word;">{{post.author}} <span>wants to play</span></h3>
+                                </div>
+                            </div>
+                            <div layout="row">
+                                <p class="user-posts-personal">
+                                    {{post.country}}<span ng-if="post.country && (post.birthdate || post.gender || post.language || post.region)"> &middot; </span>{{post.birthdate | ageFilter}} {{post.gender}}<span ng-if="(post.birthdate || post.gender) && (post.language || post.region)"> &middot; </span>{{post.language}}<span ng-if="post.language && post.region"> &middot; </span>{{post.region}}
+                                </p>
+                            </div>
+                            <!--<div>
+                                <div>
+                                    <img src="https://steamsignature.com/status/english/{{post.steamid}}.png"/>
+                                </div>
+                            </div>-->
+                        </div>
+                        <div flex-gt-sm="10" hide-sm hide-xs>
+                            <md-icon class="user-posts-arrow material-icons icon-arrow_forward"></md-icon>
+                        </div>
+                        <div flex-gt-sm="55" layout="row">
+                            <div layout="column" flex="33" style="margin-right: 5px;" ng-repeat="app in post.apps">
+
+                                <img src="{{'http://cdn.akamai.steamstatic.com/steam/apps/'+app.appid+'/header.jpg'}}" fallback-src="/images/fallback.jpg" style="width:100%; min-height:1px;"/>
+                                <p class="user-posts-game-name">
+                                    {{app.name}}
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div layout="row">
+                        <p flex="75" class="user-posts-text">{{post.text}}</p>
+                    </div>
+                </div>
+                <div flex="20" flex-sm="30" flex-xs="100" layout="column" layout-xs="row">
+                    <md-button class="md-raised user-posts-action-btn" ng-click="wantsCtrl.sendreddit(post.reddit, post.author)" ng-if="post.reddit">
+                        <md-icon class="icon-reddit-alien"></md-icon><span>Reply via reddit</span>
+                    </md-button>
+                    <!-- <md-button class="md-raised user-posts-action-btn">
+                         <md-icon class="icon-envelope"></md-icon><span>Send email</span>
+                     </md-button>-->
+                    <md-button class="md-raised user-posts-action-btn" ng-href="{{'steam://friends/add/'+post.steamid}}">
+                        <md-icon class="icon-steam"></md-icon><span>Add on Steam</span>
+                    </md-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div layout="row" layout-align="center" class="pagination-container">
+    <md-button class="md-icon-button pagedown" flex-sm="10" flex-xs="15" flex-md="5" ng-disabled="wantsCtrl.paginateDownCheck" md-no-ink ng-click="wantsCtrl.paginateDown()" >  <!-- TODO fix this -->
+        <md-icon aria-label="..." class="icon-arrow-left-alt1"></md-icon>
+    </md-button>
+    <md-button aria-label="..."  flex-sm="10" flex-xs="15" flex-md="5"  class="md-icon-button pageup" ng-disabled="wantsCtrl.paginateUpCheck" md-no-ink ng-click="wantsCtrl.paginateUp()">  <!-- TODO fix this -->
+        <md-icon aria-label="..." class="icon-arrow-right-alt1"></md-icon>
+    </md-button>
+</div>
+
+<!--
+<div layout-gt-md="row" layout-align-gt-md="center">  &lt;!&ndash; pick different button placements &ndash;&gt;
+    <div flex-gt-lg="85" flex-lg="85" layout-gt-md="row" layout-align="center">
+        <div flex-gt-lg="35" flex-lg="45" layout-margin layout="row">
+            <md-button class="md-raised">Bump your post</md-button>
+            <md-button class="md-raised">Make new post</md-button>
+        </div>
+    </div>
+</div>-->

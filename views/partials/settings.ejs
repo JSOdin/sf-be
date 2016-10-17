@@ -1,0 +1,248 @@
+
+<div layout="row" style="margin:16px;" layout-sm="column" layout-xs="column" layout-align="center">
+    <div  flex-gt-lg="20" flex-lg="20" flex-md="20"  style="background-color:white;" class="md-whiteframe-4dp">
+        <h4 style="margin-left:15px;">Settings</h4>
+        <md-list class="settings-md-list">
+            <md-list-item ng-click="settingsCtrl.triggerTab('personal')" ng-class="settingsCtrl.setting.personal ? 'active-tab':''" md-no-ink>
+                <p><md-icon ng-class="settingsCtrl.setting.personal ? 'active-tab-icon':''" hide-md>language</md-icon> Personal</p>
+                <md-tooltip hide-sm md-direction="right">Language and Regional settings</md-tooltip>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item ng-click="settingsCtrl.triggerTab('profile')" ng-class="settingsCtrl.setting.profile ? 'active-tab':''" md-no-ink>
+                <p><md-icon ng-class="settingsCtrl.setting.profile ? 'active-tab-icon':''" hide-md>person</md-icon> Profile</p>
+                <md-tooltip hide-sm md-direction="right">Set all your user public profile information</md-tooltip>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item ng-click="settingsCtrl.triggerTab('preferences')" ng-class="settingsCtrl.setting.preferences ? 'active-tab':''" md-no-ink>
+                <p><md-icon ng-class="settingsCtrl.setting.preferences ? 'active-tab-icon':''" hide-md>settings</md-icon> Preferences</p>
+                <md-tooltip hide-sm md-direction="right">Site preferences and privacy settings</md-tooltip>
+            </md-list-item>
+        </md-list>
+        <div class="settings-toast md-padding">
+
+        </div>
+    </div>
+    <div class="md-whiteframe-4dp" flex-gt-lg="50" flex-lg="50" flex-md="60" style="background-color:white;" ng-if="settingsCtrl.setting.personal">
+        <div layout="row" layout-sm="column" layout-xs="column" flex-gt-lg="100" class="md-padding" layout-align="space-between" >
+            <md-input-container flex-lg="45" flex-gt-lg="45" flex-md="45" class="settings-autocomplete-container">
+                <label>country</label>
+                <md-autocomplete md-selected-item-change="settingsCtrl.bindToModel('country',settingsCtrl.selectedItemCountry.value)" md-selected-item="settingsCtrl.selectedItemCountry" md-search-text="settingsCtrl.searchTextCountry" md-items="item in settingsCtrl.querySearch(settingsCtrl.searchTextCountry, settingsCtrl.countries)" md-item-text="item.display">
+                    <md-item-template>
+                        <span md-highlight-text="settingsCtrl.searchTextCountry" md-highlight-flags="^i">{{item.display}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        Country not found.
+                    </md-not-found>
+                </md-autocomplete>
+            </md-input-container>
+            <md-input-container flex-lg="45" flex-gt-lg="45" flex-md="45"  class="settings-autocomplete-container"><label>language</label>
+                <md-autocomplete  md-selected-item-change="settingsCtrl.bindToModel('language',settingsCtrl.selectedItemLanguage.value)" md-selected-item="settingsCtrl.selectedItemLanguage" md-search-text="settingsCtrl.searchTextLanguage" md-items="item in settingsCtrl.querySearch(settingsCtrl.searchTextLanguage, settingsCtrl.languages)" md-item-text="item.display">
+                    <md-item-template>
+                        <span md-highlight-text="settingsCtrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        Language not found.
+                    </md-not-found>
+                </md-autocomplete>
+            </md-input-container>
+        </div>
+        <div layout="row" layout-sm="column" layout-xs="column"  flex-gt-lg="100" class="md-padding" layout-align="space-between">
+            <md-input-container flex-lg="45" flex-gt-lg="45" flex-md="45" flex-sm="50" flex-xs="50">
+                <md-select aria-label="..."  ng-model-options="{trackBy: '$value.value'}" ng-model="settingsCtrl.selectedRegion" md-on-close="settingsCtrl.bindToModel('geoRegion',settingsCtrl.region)">
+                    <md-option ng-value="opt" ng-repeat="opt in settingsCtrl.regions">{{opt.display}}</md-option>
+                </md-select>
+                <label>Region</label>
+            </md-input-container>
+            <md-input-container flex-lg="45" flex-gt-lg="45" flex-md="45" flex-xs="50" >
+                <md-select aria-label="..."  ng-model-options="{trackBy: '$value.value'}" ng-model="settingsCtrl.selectedGender" md-on-close="settingsCtrl.bindToModel('gender',settingsCtrl.gender)">
+                    <md-option ng-value="opt" ng-repeat="opt in settingsCtrl.genders">{{opt.display}}</md-option>
+                </md-select>
+                <label>Gender</label>
+            </md-input-container>
+        </div>
+        <div layout="row" layout-sm="column" layout-xs="column" flex-gt-lg="100" class="md-padding" layout-align="space-between">
+            <md-input-container flex-xs="50" flex-gt-xs="50">
+                <label>Birthdate</label>
+                <input ng-model="settingsCtrl.selectedBirthdate"   placeholder="mm/dd/yyyy" required/>
+            </md-input-container>
+
+        </div>
+        <div layout="row" layout-align="end" class="md-padding">
+            <div flex="25" flex-sm="50" flex-xs="50" layout="row" layout-align="center" style="margin-right: 5px;">
+                <md-button flex="100" class="md-raised" ng-click="settingsCtrl.save()">Save</md-button>
+            </div>
+        </div>
+    </div>
+    <div layout="column" class="md-whiteframe-4dp" flex-gt-lg="50" flex-lg="50" flex-md="60" style="background-color:white;" ng-if="settingsCtrl.setting.profile">
+        <div layout="row" layout-sm="column" class="md-padding" layout-align="space-between">
+            <h4 flex="50" class="settings-profile-headers">Your Profile Link</h4>
+        </div>
+        <div layout="row" class="md-padding" layout-align="space-between">
+                <a style="margin-left:15px;" class="settings-profile-link" flex ui-sref="user({id:settingsCtrl.user.userPageID})">Profile Link</a>
+        </div>
+        <div layout="row" layout-sm="column" class="md-padding" layout-align="space-between">
+            <h4 flex="50" class="settings-profile-headers">General</h4>
+        </div>
+        <div layout="row" class="md-padding" layout-align="space-between">
+            <md-input-container flex="100" layout-margin>
+                <label>Availability</label>
+                <input type="text" ng-model="settingsCtrl.selectedTime" placeholder="ex. I'm available from 8-12pm PDT on weekends">
+            </md-input-container>
+        </div>
+        <div layout="row" layout-xs="column" layout-sm="column" class="md-padding" layout-align="space-between">
+            <md-input-container layout-margin flex-gt-sm="45">
+                <label>What are you looking for?</label>
+                <md-select aria-label="..."  ng-model-options="{trackBy: '$value.value'}" ng-model="settingsCtrl.selectedIntent" md-on-close="usersCtrl.bindToModel('lookingfor',usersCtrl.aim)">
+                    <md-option ng-value="opt" ng-repeat="opt in settingsCtrl.intents">{{opt.display}}</md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container  flex-gt-sm="45" layout-margin>
+                <md-select aria-label="..."  ng-model-options="{trackBy: '$value.value'}" ng-model="settingsCtrl.selectedCommunication" md-on-close="settingsCtrl.bindToModel('geoRegion',settingsCtrl.region)">
+                    <md-option ng-value="opt" ng-repeat="opt in settingsCtrl.communications">{{opt.display}}</md-option>
+                </md-select>
+                <label>Method of communication</label>
+            </md-input-container>
+        </div>
+        <div layout="row" class="md-padding" layout-align="space-between">
+            <md-input-container flex="95" layout-margin>
+                <label>Introduction</label>
+                <textarea style="padding: 5px;" class="settings-introduction-textarea" ng-model="settingsCtrl.introduction" placeholder="Say a little bit about yourself.">
+                </textarea>
+            </md-input-container>
+        </div>
+
+
+        <!-- new -->
+        <div ng-if="settingsCtrl.hasDota">
+            <div layout="row" layout-sm="column" class="md-padding" layout-align="space-between">
+                <h4 flex="50" class="settings-profile-headers">Dota</h4>
+            </div>
+            <div layout="row" layout-sm="column" layout-xs="column" class="md-padding" layout-align="space-between">
+                <md-input-container flex-gt-sm="45" layout-margin>
+                    <label>Which server do you play on?</label>
+                    <md-select ng-model-options="{trackBy: '$value.value'}" ng-model="settingsCtrl.serverregion" >
+                        <md-option ng-repeat="region in settingsCtrl.serverregions" ng-value="region">{{region.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex-gt-sm="45"  layout-margin>
+                    <label>What is your preferred game mode?</label>
+                    <md-select ng-model-options="{trackBy: '$value.value'}" ng-model="settingsCtrl.dotamode">
+                        <md-option ng-repeat="dotamode in settingsCtrl.dotamodes" ng-value="dotamode">{{dotamode.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+
+            <div layout="row" layout-sm="column" layout-xs="column" class="md-padding" layout-align="space-between">
+                <md-input-container flex-gt-sm="45"  layout-margin>
+                    <label>Enter your solo MMR</label>
+                    <md-select ng-model-options="{trackBy: '$value.value'}" ng-model="settingsCtrl.solommr">
+                        <md-option ng-repeat="solommr in settingsCtrl.solommrs" ng-value="solommr">{{solommr.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex-gt-sm="45"  layout-margin>
+                    <label>Enter your party MMR</label>
+                    <md-select ng-model-options="{trackBy: '$value.value'}" ng-model="settingsCtrl.partymmr">
+                        <md-option ng-repeat="partymmr in settingsCtrl.partymmrs" ng-value="partymmr">{{partymmr.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+
+            <div layout="row" layout-sm="column" layout-xs="column"  class="md-padding" layout-align="space-between">
+                <md-input-container flex-gt-sm="45"  layout-margin>
+                    <label>What is your preferred position/role?</label>
+                    <md-select ng-model-options="{trackBy: '$value.value'}" ng-model="settingsCtrl.dotarole">
+                        <md-option ng-repeat="dotarole in settingsCtrl.dotaroles" ng-value="dotarole">{{dotarole.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+        </div>
+
+        
+        
+
+
+        <div ng-if="settingsCtrl.hasCSGO">
+            <div layout="row" layout-sm="column" class="md-padding" layout-align="space-between">
+                <h4 flex="50" class="settings-profile-headers">CSGO</h4>
+            </div>
+            <div layout="row" layout-sm="column" layout-xs="column" class="md-padding" layout-align="space-between">
+                <md-input-container flex-gt-sm="45"   layout-margin>
+                    <label>What is your preferred game mode?</label>
+                    <md-select ng-model-options="{trackBy: '$value.value'}" ng-model="settingsCtrl.csgomode">
+                        <md-option ng-repeat="csgomode in settingsCtrl.csgomodes" ng-value="csgomode">{{csgomode.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex-gt-sm="45"  layout-margin>
+                    <label>What is your ladder rank?</label>
+                    <md-select ng-model-options="{trackBy: '$value.value'}" ng-model="settingsCtrl.csgorank">
+                        <md-option ng-repeat="csgorank in settingsCtrl.csgoranks" ng-value="csgorank">{{csgorank.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-sm="column" layout-xs="column"  class="md-padding" layout-align="space-between">
+                <md-input-container flex-gt-sm="45"  layout-margin>
+                    <label>What is your preferred role/playstyle?</label>
+                    <md-select ng-model-options="{trackBy: '$value.value'}" ng-model="settingsCtrl.csgorole">
+                        <md-option ng-repeat="csgorole in settingsCtrl.csgoroles" ng-value="csgorole">{{csgorole.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex-gt-sm="45"   layout-margin>
+                    <label>Are you looking for a team?</label>
+                    <md-select ng-model-options="{trackBy: '$value.value'}" ng-model="settingsCtrl.team">
+                        <md-option ng-repeat="team in settingsCtrl.teams" ng-value="team">{{team.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-sm="column" layout-xs="column"  class="md-padding" layout-align="space-between">
+                <md-input-container flex-gt-sm="45"  layout-margin>
+                    <label>How long have you been playing?</label>
+                    <md-select ng-model-options="{trackBy: '$value.value'}" ng-model="settingsCtrl.howlong">
+                        <md-option ng-repeat="howlong in settingsCtrl.howlongs" ng-value="howlong">{{howlong.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+        </div>
+
+
+
+        <!-- new end -->
+
+        <div layout="row" layout-align="end" class="md-padding">
+            <div flex="25" flex-sm="50" layout="row" layout-align="center">
+                <md-button flex="100" class="md-raised" ng-click="settingsCtrl.save()">Save</md-button>
+            </div>
+        </div>
+    </div>
+    <div class="md-whiteframe-4dp settings-right-side" layout="column" flex-gt-lg="50" flex-lg="50" flex-md="60" style="background-color:white;" ng-if="settingsCtrl.setting.preferences">
+        <div layout="row" class="md-padding">
+            <div layout="column" class="inset" ng-cloak>
+                <div layout="row">
+                    <md-switch  ng-model="settingsCtrl.preferences.addSteamSetting" aria-label="Switch 1" class="md-block"></md-switch>
+                    <p>Only allow users on your contact list to add you on Steam.</p>
+                </div>
+                <div layout="row">
+                    <md-switch  ng-model="settingsCtrl.preferences.msgOnSiteSetting" aria-label="Switch 2" class="md-block"></md-switch>
+                    <p> Only allow users from your contact list to message you</p>
+                </div>
+                <div layout="row">
+                    <md-switch  ng-model="settingsCtrl.preferences.profilePrivacy" class="md-block" aria-label="Switch"></md-switch>
+                    <p>Keep my profile private (visible only to logged in users)</p>
+                </div>
+                <div layout="row">
+                    <md-switch  ng-model="settingsCtrl.preferences.noDisplayStats"  class="md-block" aria-label="Switch" ></md-switch>
+                    <p>Do not display my ladder and ranking stats for any game</p>
+                </div>
+                <div layout="row">
+                    <md-switch  ng-model="settingsCtrl.preferences.noDisplayLinks"  class="md-block" aria-label="Switch" ></md-switch>
+                    <p flex>Do not display any links to my Dotabuff, CSGOstats pages and other third party sites</p>
+                </div>
+
+            </div>
+        </div>
+        <div layout="row" layout-align="end" class="md-padding" layout-padding layout-margin>
+            <div flex="25" flex-sm="50" style="margin-right:5px;" layout="row" layout-align="center">
+                <md-button flex="100" class="md-raised" ng-click="settingsCtrl.save()">Save</md-button>
+            </div>
+        </div>
+    </div>
+</div>

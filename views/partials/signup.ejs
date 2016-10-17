@@ -1,0 +1,160 @@
+<div layout="row" layout-wrap layout-margin layout-align="center">
+    <md-card flex="60" flex-lg="70" flex-md="100" flex-sm="100" layout-wrap layout-align="center">
+        <md-content layout-padding md-theme="docs-dark">
+            Step 3. We see you have these games. Fill out each form to complete your profile.
+        </md-content>
+        <md-content layout-padding layout-margin layout="column" flex="100">
+            <div layout="row" layout-align="space-around" hide-sm>
+                <md-input-container flex="{{signupCtrl.dotaSize ? 50 : 45}}" layout-margin ng-show="signupCtrl.dota()">
+                    <img class="md-whiteframe-5dp" ng-src="/images/dotabanner.jpg">
+                </md-input-container>
+                <md-input-container flex="{{signupCtrl.csgoSize ? 50 : 45}}" layout-margin ng-show="signupCtrl.csgo()">
+                    <img class="md-whiteframe-5dp" ng-src="/images/csgobanner.jpg">
+                </md-input-container>
+            </div>
+            <!-- mobile responsive section -->
+            <div layout="row" layout-align="center" hide-gt-sm>
+                <md-input-container flex="80" layout-margin ng-show="signupCtrl.dota()">
+                    <img class="md-whiteframe-5dp" ng-src="/images/dotabanner.jpg">
+                </md-input-container>
+            </div>
+            <div layout="row"  layout-wrap layout-align="space-around"  hide-gt-sm>
+                <md-input-container flex="100" layout-margin ng-show="signupCtrl.dota()">
+                    <label>Which server do you play on?</label>
+                    <md-select ng-model="signupCtrl.serverregion">
+                        <md-option ng-repeat="region in signupCtrl.serverregions" ng-value="region.value">{{region.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="100" layout-margin ng-show="signupCtrl.dota()">
+                    <label>What is your preferred game mode?</label>
+                    <md-select ng-model="signupCtrl.dotamode">
+                        <md-option ng-repeat="dotamode in signupCtrl.dotamodes" ng-value="dotamode.value">{{dotamode.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="100" layout-margin ng-show="signupCtrl.dota()">
+                    <label>Enter your solo MMR</label>
+                    <md-select ng-model="signupCtrl.solommr">
+                        <md-option ng-repeat="solommr in signupCtrl.solommrs" ng-value="solommr.value">{{solommr.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="100" layout-margin ng-show="signupCtrl.dota()">
+                    <label>Enter your party MMR</label>
+                    <md-select ng-model="signupCtrl.partymmr">
+                        <md-option ng-repeat="partymmr in signupCtrl.partymmrs" ng-value="partymmr.value">{{partymmr.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="100" layout-margin ng-show="signupCtrl.dota()">
+                    <label>What is your preferred position/role?</label>
+                    <md-select ng-model="signupCtrl.dotarole">
+                        <md-option ng-repeat="dotarole in signupCtrl.dotaroles" ng-value="dotarole.value">{{dotarole.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-align="center" hide-gt-sm>
+                <md-input-container flex="80" layout-margin ng-show="signupCtrl.csgo()">
+                    <img class="md-whiteframe-5dp" ng-src="/images/csgobanner.jpg">
+                </md-input-container>
+            </div>
+            <div layout="row"  layout-wrap layout-align="space-around"  hide-gt-sm>
+                <md-input-container flex="100" layout-margin ng-show="signupCtrl.csgo()">
+                    <label>What is your preferred game mode?</label>
+                    <md-select ng-model="signupCtrl.csgomode">
+                        <md-option ng-repeat="csgomode in signupCtrl.csgomodes" ng-value="csgomode.value">{{csgomode.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="100" layout-margin ng-show="signupCtrl.csgo()">
+                    <label>What is your ladder rank?</label>
+                    <md-select ng-model="signupCtrl.csgorank">
+                        <md-option ng-repeat="csgorank in signupCtrl.csgoranks" ng-value="csgorank.value">{{csgorank.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="100" layout-margin ng-show="signupCtrl.csgo()">
+                    <label>What is your preferred role/playstyle?</label>
+                    <md-select ng-model="signupCtrl.csgorole">
+                        <md-option ng-repeat="csgorole in signupCtrl.csgoroles" ng-value="csgorole.value">{{csgorole.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="100" layout-margin ng-show="signupCtrl.csgo()">
+                    <label>Are you looking for a team?</label>
+                    <md-select ng-model="signupCtrl.team">
+                        <md-option ng-repeat="team in signupCtrl.teams" ng-value="team.value">{{team.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="100" ng-show="signupCtrl.csgo()">
+                    <label>How long have you been playing?</label>
+                    <md-select ng-model="signupCtrl.howlong">
+                        <md-option ng-repeat="howlong in signupCtrl.howlongs" ng-value="howlong.value">{{howlong.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <!-- mobile responsive section end -->
+
+            <div layout="row"  layout-wrap layout-align="space-around" hide-sm>
+                <md-input-container flex="45" layout-margin ng-show="signupCtrl.dota()">
+                    <label>Which server do you play on?</label>
+                    <md-select ng-model="signupCtrl.serverregion">
+                        <md-option ng-repeat="region in signupCtrl.serverregions" ng-value="region.value">{{region.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="45" layout-margin ng-show="signupCtrl.csgo()">
+                    <label>What is your preferred game mode?</label>
+                    <md-select ng-model="signupCtrl.csgomode">
+                        <md-option ng-repeat="csgomode in signupCtrl.csgomodes" ng-value="csgomode.value">{{csgomode.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="45" layout-margin ng-show="signupCtrl.dota()">
+                    <label>What is your preferred game mode?</label>
+                    <md-select ng-model="signupCtrl.dotamode">
+                        <md-option ng-repeat="dotamode in signupCtrl.dotamodes" ng-value="dotamode.value">{{dotamode.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="45" layout-margin ng-show="signupCtrl.csgo()">
+                    <label>What is your ladder rank?</label>
+                    <md-select ng-model="signupCtrl.csgorank">
+                        <md-option ng-repeat="csgorank in signupCtrl.csgoranks" ng-value="csgorank.value">{{csgorank.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="45" layout-margin ng-show="signupCtrl.dota()">
+                    <label>Enter your solo MMR</label>
+                    <md-select ng-model="signupCtrl.solommr">
+                        <md-option ng-repeat="solommr in signupCtrl.solommrs" ng-value="solommr.value">{{solommr.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="45" layout-margin ng-show="signupCtrl.csgo()">
+                    <label>What is your preferred role/playstyle?</label>
+                    <md-select ng-model="signupCtrl.csgorole">
+                        <md-option ng-repeat="csgorole in signupCtrl.csgoroles" ng-value="csgorole.value">{{csgorole.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="45" layout-margin ng-show="signupCtrl.dota()">
+                    <label>Enter your party MMR</label>
+                    <md-select ng-model="signupCtrl.partymmr">
+                        <md-option ng-repeat="partymmr in signupCtrl.partymmrs" ng-value="partymmr.value">{{partymmr.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="45" layout-margin ng-show="signupCtrl.csgo()">
+                    <label>Are you looking for a team?</label>
+                    <md-select ng-model="signupCtrl.team">
+                        <md-option ng-repeat="team in signupCtrl.teams" ng-value="team.value">{{team.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="45" layout-margin ng-show="signupCtrl.dota()">
+                    <label>What is your preferred position/role?</label>
+                    <md-select ng-model="signupCtrl.dotarole">
+                        <md-option ng-repeat="dotarole in signupCtrl.dotaroles" ng-value="dotarole.value">{{dotarole.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="45" ng-show="signupCtrl.csgo()">
+                    <label>How long have you been playing?</label>
+                    <md-select ng-model="signupCtrl.howlong">
+                        <md-option ng-repeat="howlong in signupCtrl.howlongs" ng-value="howlong.value">{{howlong.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-align="end end">
+                <div class="column" layout-align="end"><md-button class="md-raised md-priamry" offset="40" flex="15" ng-click="signupCtrl.skipGameForm()">Skip for now</md-button></div>
+                <div class="column" layout-align="end"><md-button class="md-raised md-priamry" offset="40" flex="15" ng-click="signupCtrl.submitGameProfile()">Finish</md-button></div>
+            </div>
+        </md-content>
+    </md-card>
+</div>

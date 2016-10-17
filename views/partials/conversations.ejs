@@ -1,0 +1,48 @@
+
+<div layout="row" layout-align="center">
+    <div flex="20" offset="5" class="convo-toast">
+
+    </div>
+</div>
+<div layout="row" layout-align="center">
+    <md-card layout="column" class="md-whiteframe-3dp" flex-gt-lg="50" flex-lg="60" flex-md="80" flex-sm="90" >
+        <md-toolbar layout-padding class="conversation-header">
+            <div layout="row" layout-align="space-between">
+                <h4>Conversations</h4>
+                <div flex="20" flex-sm="40" layout="column" layout-align="end"><md-button style="color:black;" class="md-raised" ng-click="convoCtrl.deleteAll()">Delete all</md-button></div>
+            </div>
+        </md-toolbar>
+        <div layout="column" layout-padding layout-margin>
+            <div layout="row">
+                <div flex="20" flex-sm="30">
+                    <h5 style="margin-top:0; margin-bottom:0; color:rgba(0,0,0,0.5)">With</h5>
+                </div>
+                <div flex="60" flex-sm="50">
+                    <h5 style="margin-top:0; margin-bottom:0;  color:rgba(0,0,0,0.5)">Subject</h5>
+                </div>
+                <div flex="20">
+                    <h5 style="margin-top:0; margin-bottom:0;  color:rgba(0,0,0,0.5)">Time</h5>
+                </div>
+            </div>
+            <div ng-repeat="conversation in convoCtrl.conversations |orderByLastMsg track by $index" class="conversation-list-content">
+                <div  layout="row">
+                    <div flex="20" flex-sm="30">
+                        <p><a class="conversation-profile-link" ui-sref="user({id:conversation.withpageid})" flex>{{conversation.with}}</a></p>
+                    </div>
+                    <div flex="55" flex-sm="50">
+                        <p><a ng-class="conversation.read ? 'conversation-messages-link' : 'conversation-messages-link conversation-not-read'" ui-sref="convo({id:conversation._id})" flex>Re: {{conversation.subject}}</a></p>
+                    </div>
+                    <div flex="25">
+                        <p class="conversation-time-ago">{{conversation.messages | timeAgoFilter | formatAgo}}</p>
+                    </div>
+                </div>
+                <md-divider ng-if="convoCtrl.conversations.length > 1 && $index != (convoCtrl.conversations.length - 1)"></md-divider>
+
+            </div>
+            <div layout="row">
+                <p class="not-found-text" ng-if="convoCtrl.conversations.length == 0"><br><md-icon class="not-found-text" class="material-icons">error_outline</md-icon> &nbsp; No conversations were found.</p>
+            </div>
+        </div>
+    </md-card>
+</div>
+

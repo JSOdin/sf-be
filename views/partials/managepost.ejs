@@ -1,0 +1,214 @@
+<div layout-gt-md="row" layout-align-gt-md="center" class="wants-form-wrap" >
+    <div flex-gt-lg="90" flex-lg="90" layout-gt-md="row" layout-align="center">
+        <div flex-gt-lg="65" flex-lg="65" class="md-whiteframe-9dp user-posts" layout="column" layout-margin layout-padding ng-if="manageCtrl.loggedin">
+            <h3>Edit and Bump your previously existing post</h3>
+            <div layout="row" ng-if="manageCtrl.loggedin">
+                <p flex="60">This post will be saved in your account. You only need to make a post once. Bump the post to be seen on the front page. If you've filled out the personal section of your profile in the Settings page, the birthdate, language, region, country, and gender will be taken from there.  If you haven't, the information for the post will come from the values you input in this form.</p>
+            </div>
+
+            <md-content class="md-padding" layout="column" >
+                <h2 class="" ng-if="!manageCtrl.loggedin">Alias<span style="color:red;"> * required</span></h2>
+                <div layout="row" ng-if="!manageCtrl.loggedin">
+                    <input flex="30" type="text" class="user-posts-input" ng-model="manageCtrl.alias"/>
+                </div>
+                <h2 class="">Game (select up to three)<span style="color:red;"> * required</span></h2>
+                <md-chips ng-model="manageCtrl.selectedGames" md-autocomplete-snap="" md-transform-chip="manageCtrl.transformChip($chip)" md-require-match="manageCtrl.autocompleteDemoRequireMatch" md-on-add="manageCtrl.addCount('game')" md-on-remove="manageCtrl.deleteCount('game')" placeholder="All">
+                    <md-autocomplete md-selected-item="manageCtrl.selectedItemGame" md-search-text="manageCtrl.searchTextGame" md-items="item in manageCtrl.querySearch(manageCtrl.searchTextGame, manageCtrl.games)" md-item-text="item.display" placeholder="Type and select item" ng-disabled="(manageCtrl.chipCount['game']== 3)" >
+                        <span md-highlight-text="manageCtrl.searchTextGame">{{item.display}}</span>
+                    </md-autocomplete>
+
+                    <md-chip-template>
+                        <span>
+                          <strong>{{$chip.display}}</strong>
+                            <!--       <em>({{$chip.type}})</em>-->
+                        </span>
+                    </md-chip-template>
+                </md-chips>
+                <h2 class="">Communication preferences<span class="helper-text">(select up to three)</span></h2>
+                <md-chips ng-model="manageCtrl.selectedCommunications" md-autocomplete-snap="" md-transform-chip="manageCtrl.transformChip($chip)" md-require-match="manageCtrl.autocompleteDemoRequireMatch" md-on-add="manageCtrl.addCount('communication')" md-on-remove="manageCtrl.deleteCount('communication')" placeholder="All">
+                    <md-autocomplete md-selected-item="manageCtrl.selectedItemCommunication" md-search-text="manageCtrl.searchTextCommunication" md-items="item in manageCtrl.querySearch(manageCtrl.searchTextCommunication, manageCtrl.communications)" md-item-text="item.display" placeholder="Type and select item" ng-disabled="(manageCtrl.chipCount['communication']== 3)" >
+                        <span md-highlight-text="manageCtrl.searchTextCommunication">{{item.display}}</span>
+                    </md-autocomplete>
+
+                    <md-chip-template>
+                        <span>
+                          <strong>{{$chip.display}}</strong>
+                            <!--       <em>({{$chip.type}})</em>-->
+                        </span>
+                    </md-chip-template>
+                </md-chips>
+                <h2 class="">Post text<span style="color:red;"> * required</span></h2>
+                <div layout="row">
+                    <textarea flex="60" type="text" class="user-posts-input" ng-model="manageCtrl.posttext" placeholder="Introduce yourself and put other misc information here"></textarea>
+                </div>
+                <h2 class="">64-bit SteamID (usually 17 or 18 digits - for ex. 76561197961033824)<span style="color:red;"> * required</span></h2>
+                <div layout="row">
+                    <input flex="30" type="text" class="user-posts-input" ng-model="manageCtrl.steamid" ng-disabled="manageCtrl.hasSteamID"/>
+                </div>
+                <h2 class="">Birthdate</h2>
+                <div layout="row">
+                    <input flex="30" type="text" class="user-posts-input" ng-model="manageCtrl.birthdate" ng-disabled="manageCtrl.hasBirthdate" placeholder="mm/dd/yyyy"/>
+                </div>
+                <div layout="row">
+                    <div flex="30">
+                        <h2 class="">Language <span class="helper-text">(type and select from dropdown)</span></h2>
+                        <md-autocomplete md-selected-item="manageCtrl.selectedItemLanguage" md-search-text="manageCtrl.searchTextLanguage" md-items="item in manageCtrl.querySearch(manageCtrl.searchTextLanguage, manageCtrl.languages)" md-item-text="item.display" ng-disabled="manageCtrl.hasLanguage" class="user-posts-form-autocomplete" md-min-length="0">
+                            <md-item-template>
+                                <span md-highlight-text="manageCtrl.searchTextLanguage" md-highlight-flags="^i">{{item.display}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                Language not found.
+                            </md-not-found>
+                        </md-autocomplete>
+                    </div>
+                    <div flex="30">
+                        <h2 class="">Region <span class="helper-text">(type and select from dropdown)</span></h2>
+                        <md-autocomplete md-selected-item="manageCtrl.selectedItemRegion" md-search-text="manageCtrl.searchTextRegion" md-items="item in manageCtrl.querySearch(manageCtrl.searchTextRegion, manageCtrl.regions)" md-item-text="item.display" ng-disabled="manageCtrl.hasRegion" class="user-posts-form-autocomplete" md-min-length="0">
+                            <md-item-template>
+                                <span md-highlight-text="manageCtrl.searchTextRegion" md-highlight-flags="^i">{{item.display}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                Region not found.
+                            </md-not-found>
+                        </md-autocomplete>
+                    </div>
+                    <div flex="30">
+                        <h2 class="">Country <span class="helper-text">(type and select from dropdown)</span></h2>
+                        <md-autocomplete md-selected-item="manageCtrl.selectedItemCountry" md-search-text="manageCtrl.searchTextCountry" md-items="item in manageCtrl.querySearch(manageCtrl.searchTextCountry, manageCtrl.countries)" md-item-text="item.display" ng-disabled="manageCtrl.hasCountry" class="user-posts-form-autocomplete" md-min-length="0">
+                            <md-item-template>
+                                <span md-highlight-text="manageCtrl.searchTextCountry" md-highlight-flags="^i">{{item.display}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                Country not found.
+                            </md-not-found>
+                        </md-autocomplete>
+                    </div>
+                </div>
+                <div layout="row">
+                    <div flex="33">
+                        <h2 class="">Gender</h2>
+                        <md-select ng-model="manageCtrl.gender" ng-disabled="manageCtrl.hasGender" class="user-posts-form-select">
+                            <md-option value="male">
+                                Male
+                            </md-option>
+                            <md-option value="female" >
+                                Female
+                            </md-option>
+                        </md-select>
+                    </div>
+                </div>
+                <div layout="column" style="margin-bottom: 10px;" ng-if="manageCtrl.selectedGames[0].value !='all'">
+                    <h2 class="">Game-specific preferences<span> - (Click on a game to reveal additional options)</span></h2>
+
+                    <!--       <div layout="row" ng-if="!wantsCtrl.stateGameFields">
+                               <md-button class="md-raised" ng-click="wantsCtrl.toggleGameFields()">Show</md-button>
+                           </div>
+                           <div layout="row" ng-if="wantsCtrl.stateGameFields">
+                               <md-button class="md-raised" ng-click="wantsCtrl.toggleGameFields()">Hide</md-button>
+                           </div>-->
+
+
+
+                    <div layout="column" class="user-posts-game-specific-fields">
+                        <div layout="column" ng-repeat="game in manageCtrl.selectedGames | allFilter" >
+                            <label for="{{game.appid+'dropdown'}}"><h4 class="user-posts-game-specific-fields-h4" style="width: 30%;"><md-icon>add</md-icon><input class="game-fields-dropdown" type="checkbox" id="{{game.appid+'dropdown'}}" ng-model="manageCtrl[game.appid]"/> {{game.display}}</h4></label>
+
+
+                            <div layout="column" layout-wrap class="user-posts-game-specific-fields-input-wrapper" ng-if="manageCtrl[game.appid]">
+                                <div ng-repeat="(key,array) in (game.fieldoptions)" layout="column">
+                                    <h2>{{key}}<span> - (You can select multiple options)</span></h2>
+                                    <md-select ng-model="manageCtrl.selectedGameFields[game.appid][key]" class="user-posts-form-select" multiple="true">
+                                        <md-tooltip>
+                                            Selected options are highlighted.
+                                        </md-tooltip>
+                                        <md-option ng-repeat="option in array" value="{{option}}" aria-selected="{{manageCtrl.selectedGameFields[game.appid][key].indexOf(option) >= 0 ? 'true':''}}">
+                                            {{option}}
+                                        </md-option>
+                                    </md-select>
+                                </div>
+                                <h2>Attitude<span> - (You can select multiple options)</span></h2>
+                                <md-select ng-model="manageCtrl.selectedGameFields[game.appid]['Attitude']" class="user-posts-form-select" multiple="true">
+                                    <md-tooltip>
+                                        Selected options are highlighted.
+                                    </md-tooltip>
+                                    <md-option ng-repeat="option in ['I mess around in game and do random things to have fun','I am focused on learning the game and constantly improving myself to succeed','I expect those around me to try their best']" value="{{option}}" >
+                                        {{option}}
+                                    </md-option>
+                                    </md-option>
+                                </md-select>
+                                <h2>Skill Level<span> - (Select one)</span></h2>
+                                <md-select ng-model="manageCtrl.selectedGameFields[game.appid]['Skill Level']" class="user-posts-form-select">
+                                    <md-tooltip>
+                                        Selected options are highlighted.
+                                    </md-tooltip>
+                                    <md-option ng-repeat="option in ['I just started playing or I\'m still trying to grasp basics of the game','I\'ve played for a while and am familiar with the game but still have much to improve on','I consider myself a veteran','I\'m an expert at the game']" value="{{option}}">
+                                        {{option}}
+                                    </md-option>
+                                </md-select>
+                            </div>
+                          <!--  <h2>Attitude<span> - (You can select multiple options)</span></h2>
+                            <md-select ng-model="manageCtrl.selectedGameFields[game.appid]['Attitude']" class="user-posts-form-select" multiple="true">
+                                <md-tooltip>
+                                    Selected options are highlighted.
+                                </md-tooltip>
+                                <md-option ng-repeat="option in ['I\'m looking for people to mess around with in game and do random things to have fun','I am focused at learning the game and constantly improving myself to succeed','I have complete mastery over the game and expect those around me to be the same']" value="{{option}}" >
+                                    {{option}}
+                                </md-option>
+                            </md-select>-->
+
+                        </div>
+                    </div>
+                </div>
+                <div layout="column">
+                    <md-checkbox class="user-posts-checkbox" ng-model="manageCtrl.allowReddit">
+                        Allow users to contact me via reddit.
+                    </md-checkbox>
+                    <div layout="row" ng-if="manageCtrl.allowReddit">
+                        <input flex="30" type="text" ng-model="manageCtrl.reddit" class="user-posts-input" placeholder="Enter your reddit username"/>
+                    </div>
+
+                </div>
+               <!-- <div layout="column" style="margin-top: 15px;">
+                    <md-checkbox class="user-posts-checkbox" ng-model="manageCtrl.allowEmail">
+                        Allow users to contact me via Email
+                    </md-checkbox>
+                    <div layout="row" ng-if="manageCtrl.allowEmail">
+                        <input flex="30" type="email" ng-model="manageCtrl.email" class="user-posts-input" placeholder="ex. johndoe@gmail.com"/>
+                    </div>
+                </div>-->
+                <div layout="column" style="margin-top: 15px;" ng-if="!manageCtrl.loggedin">
+                    <md-checkbox class="user-posts-checkbox" ng-model="manageCtrl.allowPasscode">
+                        Make a passcode to bump or edit post later.
+                    </md-checkbox>
+                    <div layout="row" ng-if="manageCtrl.allowPasscode">
+                        <input flex="30" type="text" ng-model="manageCtrl.passcode" class="user-posts-input" placeholder="ex. WjRWJEF640"/>
+                    </div>
+                </div>
+                <div layout="row" layout-align="space-between">
+                    <div class="user-posts-toast" >
+
+                    </div>
+                    <md-button class="md-raised" ng-click="manageCtrl.memberEditAndBump()">Edit and Bump post</md-button>
+                </div>
+             </md-content>
+        </div>
+        <div flex-gt-lg="35" flex-lg="35" layout-margin class="md-whiteframe-9dp user-posts" layout="column" layout-margin layout-padding ng-if="!manageCtrl.loggedin">
+            <md-content class="md-padding" layout="column" ng-if="!manageCtrl.loggedin">
+                <h3>Bump your previously existing post</h3>
+                <div layout="row">
+                    <p flex="85">Enter the unique key you that was generated for you when making your post.</p>
+                </div>
+                <h2 class="">Unique key<span style="color:red;"> * required</span></h2>
+                <div layout="row">
+                    <input flex="100" type="text" class="user-posts-input" ng-model="manageCtrl.uniqueKey"/>
+                </div>
+                <div layout="row" layout-align="space-between">
+                    <div class="user-posts-toast" >
+
+                    </div>
+                    <md-button class="md-raised" ng-click="manageCtrl.checkPasscodeBump()">Bump your post</md-button>
+                </div>
+            </md-content>
+        </div>
+    </div>
+</div>

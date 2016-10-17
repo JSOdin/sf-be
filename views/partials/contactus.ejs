@@ -1,0 +1,17 @@
+
+<div layout="row" layout-align="center">
+
+    <div style="margin-top: 50px; background:rgba(255,255,255,0.6);" class="md-whiteframe-5dp" layout="row" flex="50" layout-align="center"><div layout="column" layout-padding layout-margin class="message-window-form-container">
+        <div layout="row" layout-align="end">                                               <!-- TODO pick a better place for toast -->
+            <div flex="45" class="convo-toast"></div>
+        </div>
+        <h3>Contact Us</h3>
+        <p>Write concerns, bug reports, suggestions, and anything else you want to tell us.</p>
+        <label class="message-window-subject-label">Subject</label>
+        <input required class="message-window-input" ng-model="cntCtrl.subject"/>
+        <label class="message-window-body-label">Body</label>
+        <textarea class="message-window-textarea" ng-model="cntCtrl.body" required></textarea>
+        <div layout="row" layout-align="end"><md-button class="md-raised md-button" flex="20" ng-click="cntCtrl.sendMsg(cntCtrl.subject, cntCtrl.body)">Send</md-button></div>
+    </div></div>
+    
+</div>

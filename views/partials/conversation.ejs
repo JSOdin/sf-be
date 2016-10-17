@@ -1,0 +1,14 @@
+
+<div layout="row" layout-align="center">
+    <md-card layout="column" class="md-whiteframe-3dp" flex="40" flex-lg="60" flex-md="80" flex-sm="95" layout-padding layout-margin>
+          <div layout="row" layout-align="end" layout-align-sm="center">
+              <md-button style="margin-left: 5px;" class="md-raised md-accent" flex="10" flex-sm="20" ng-click="sconvoCtrl.openMsgForm()"><md-icon>reply</md-icon> Reply</md-button>
+              <md-button class="md-raised" flex="30" flex-sm="60" ng-click="sconvoCtrl.deleteconvo()"><md-icon>clear</md-icon> Delete <span hide-sm>Conversation</span></md-button>
+          </div>
+          <div class="conversation-message-wrapper" layout="column" ng-repeat="message in sconvoCtrl.convo|orderBySubmitted">
+              <a href="#" class="sconvo-profile conversation-profile-link">{{message.from}} <span class="conversation-time-ago">{{message | formatAgo}}</span></a>
+              <p class="sconvo-message">{{message.body}}</p>
+              <md-divider ng-if="sconvoCtrl.convo.length > 1 && $index != (sconvoCtrl.convo.length - 1)"></md-divider>
+          </div>
+    </md-card>
+</div>

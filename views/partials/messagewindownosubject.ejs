@@ -1,0 +1,9 @@
+<form>
+    <div layout="column" layout-padding layout-margin class="message-ns-window-wrapper">
+        <h3>Reply to {{sconvoCtrl.with}}</h3>
+
+
+        <textarea class="message-ns-window-textarea" required ng-model="sconvoCtrl.body"></textarea>
+        <div layout="row" layout-align="end"><md-button class="md-raised md-button" flex="20" ng-click="sconvoCtrl.reply(sconvoCtrl.body)">Send</md-button></div>
+    </div>
+</form>

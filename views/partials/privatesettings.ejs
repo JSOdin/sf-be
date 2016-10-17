@@ -1,0 +1,41 @@
+
+
+<div layout="row" layout-wrap layout-margin layout-align="center">
+    <md-card flex="70" flex-lg="80" flex-md="100" flex-sm="70" layout-wrap layout-align="center" layout-xs="column" layout-sm="column">
+        <md-content layout-padding md-theme="docs-dark">
+            Just a reminder: please set your steam profile to public. <span ng-click="signupprivCtrl.openExplainDialog()" class="private-settings-why">(Why?)</span>
+        </md-content>
+        <md-content layout="column" layout-align-xs="start" layout-align-sm="start">
+            <div layout="row" >
+                <div layout="column" flex="100" layout-padding layout-margin>
+                    <p>Your steam profile link is here: <a hide-sm hide-xs class="private-settings-link" ng-click="signupprivCtrl.openSteamProfile(signupprivCtrl.profileurl)">{{signupprivCtrl.profileurl}}</a><a ng-href="{{signupprivCtrl.profileurl}}" hide-md hide-lg hide-gt-lg>Steam community link</a></p>
+                </div>
+            </div>
+            <div layout="row" layout-sm="column" layout-xs="column" layout-padding layout-margin>
+                <div layout="column" flex-gt-lg="25" flex-lg="25" flex-md="25" layout-margin>
+                    <img class="md-whiteframe-5dp priv-img" src="/images/steamprofile.png"/>
+                    <p>1. Go to your steam profile and click on "edit profile" link</p>
+                </div>
+                <div layout="column" flex-gt-sm="10" layout-align-gt-sm="center">
+                    <i class="material-icons private-settings-arrow" hide-sm hide-xs>arrow_forward</i>
+                    <i class="material-icons private-settings-arrow" hide-md hide-lg hide-gt-lg>arrow_downward</i>
+                </div>
+                <div layout="column" flex-gt-lg="25" flex--lg="25" flex-md="25" layout-margin>
+                    <img class="md-whiteframe-5dp priv-img" src="/images/insideedit.png"/>
+                    <p>2. Navigate to "My Privacy Settings" in the "edit" page.</p>
+                </div>
+                <div layout="column" flex-gt-sm="10" layout-align-gt-sm="center">
+                    <i class="material-icons private-settings-arrow" hide-sm hide-xs>arrow_forward</i>
+                    <i class="material-icons private-settings-arrow" hide-md hide-lg hide-gt-lg>arrow_downward</i>
+                </div>
+                <div layout="column" flex-gt-lg="25" flex-lg="25" flex-md="25" layout-margin>
+                    <img class="md-whiteframe-5dp priv-img" src="/images/privatepage.png"/>
+                    <p>3. Change your Profile Status to "Public" and save changes.</p>
+                </div>
+            </div>
+            <div layout="row" layout-align="end end" layout-padding layout-margin>
+                <div class="column" layout-align="end"><md-button class="md-raised md-priamry" ng-click="signupprivCtrl.goToPosts()">Ok I'm done, let me in!</md-button></div>
+            </div>
+        </md-content>
+    </md-card>
+</div>

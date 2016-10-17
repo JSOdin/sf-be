@@ -1,0 +1,305 @@
+
+<div layout-gt-lg="row" layout-lg="row" layout-md="column" layout-sm="column" layout-xs="column" layout-padding layout-margin layout-align-gt-lg="center" layout-align-lg="center" layout-align-md="center center" layout-align-sm="center center" layout-align-xs="center center">
+    <div class="md-whiteframe-4dp friends-list-section" layout="column" flex-gt-lg="45" flex-lg="45" style="background-color:white;">
+        <md-tabs md-dynamic-height class="md-padding">
+            <md-tab class="all" label="{{group.name}}" ng-repeat="group in friendsCtrl.groups track by $index">
+                <div layout-padding>
+                    <div class="toast-container"><h4>Manage your Contacts</h4></div>
+                    <div layout="row">
+                        <md-button class="md-raised md-primary" ng-if="group.name != 'All Friends'" ng-click="friendsCtrl.deleteGroup(group.name)">
+                            Delete group
+                        </md-button>
+                        <p class="group-title">Group - {{group.name}}</p>
+                    </div>
+                    <div layout="row" layout-wrap>
+                        <p class="not-found-text" ng-if="group.list.length == 0"><br><md-icon class="not-found-text" class="material-icons">error_outline</md-icon> &nbsp; No users were found in this list.</p>
+                        <div flex="100" layout="row" layout-md="row" layout-sm="row" ng-repeat="friend in group.list track by $index"  class="md-whiteframe-2dp friends-list-each">
+                            <div class="friends-list-avatar">
+                                <img style="width: 52px; height: 52px;" src="{{friend.avatarmedium}}"/>
+                            </div>
+                            <div flex-gt-sm="45" flex-sm="45" flex-xs="50" style="height:auto;" layout="row" layout-align="start center">
+                                <h5 flex="100" style="margin: auto 10px; display:inline-block;  text-overflow: ellipsis; white-space: nowrap; overflow:hidden;">{{friend.personaname}}</h5>
+                            </div>
+                            <div  flex-md="40" flex-lg="40" flex-gt-lg="40" flex-sm="50" flex-xs="50" layout="row" layout-align="end center">
+                                <md-button ui-sref="user({id:friend.userPageID})" class="comment-fab-custom md-raised md-primary md-fab md-hue-2 md-mini user-single-profile-section-comment-toolbar-user-btn friends-non-add-btn" aria-label="SiteProfile">
+                                    <md-tooltip  md-direction="bottom">
+                                        Site Profile
+                                    </md-tooltip>
+                                    <md-icon>person</md-icon>
+                                </md-button>
+                                <md-button ng-click="friendsCtrl.openMsgForm($event,comment,friend)" class="md-raised md-fab md-mini md-accent md-hue-2 user-single-profile-section-comment-toolbar-user-btn friends-non-add-btn" aria-label="Message">
+                                    <md-tooltip  md-direction="bottom">
+                                        Message
+                                    </md-tooltip>
+                                    <md-icon class="icon-mail3"></md-icon>
+                                </md-button>
+                                <md-menu>
+                                    <md-button ng-click="friendsCtrl.openMenu($mdOpenMenu,$event)" class="md-raised md-fab md-mini md-accent md-hue-2 user-friend-group-user-btn friends-action-menu-btn" aria-label="Message">
+                                        <md-tooltip  md-direction="bottom">
+                                            Actions
+                                        </md-tooltip>
+                                        <md-icon>build</md-icon>
+                                    </md-button>
+                                    <md-menu-content>
+                                        <md-menu-item>
+                                            <md-button ui-sref="user({id:friend.userPageID})">
+                                                 Profile
+                                            </md-button>
+                                        </md-menu-item>
+                                        <md-menu-item>
+                                            <md-button ng-click="friendsCtrl.openMsgForm($event,comment,friend)">
+                                                 Message User
+                                            </md-button>
+                                        </md-menu-item>
+                                        <md-menu-item>
+                                            <md-button ng-click="friendsCtrl.removeFriend(friend)" >
+                                                Delete User
+                                            </md-button>
+                                        </md-menu-item>
+                                    </md-menu-content>
+                                </md-menu>
+                                <md-menu ng-if="group.name == 'All Friends'">
+                                    <md-button ng-click="friendsCtrl.openMenu($mdOpenMenu,$event)" class="md-raised md-fab md-mini md-accent md-hue-2 user-friend-group-user-btn" aria-label="Message">
+                                        <md-tooltip  md-direction="bottom">
+                                            Move to group
+                                        </md-tooltip>
+                                        <md-icon>view_list</md-icon>
+                                    </md-button>
+                                    <md-menu-content>
+                                        <md-menu-item ng-repeat="name in friendsCtrl.groupnames">
+                                            <md-button ng-click="friendsCtrl.addToGroup(name,friend,group)">
+                                                {{name}}
+                                            </md-button>
+                                        </md-menu-item>
+                                    </md-menu-content>
+                                </md-menu>
+
+
+                                <md-button ng-if="group.name == 'All Friends'" ng-click="friendsCtrl.removeFriend(friend)" class="md-raised md-fab md-mini md-accent md-hue-2 user-single-profile-section-comment-toolbar-user-btn friends-non-add-btn" aria-label="Message">
+                                    <md-tooltip  md-direction="bottom">
+                                        Delete friend
+                                    </md-tooltip>
+                                    <md-icon>clear</md-icon>
+                                </md-button>
+                                <md-button ng-if="group.name != 'All Friends'" ng-click="friendsCtrl.deleteFromGroup(group.name,friend)" class="md-raised md-fab md-mini md-accent md-hue-2 user-single-profile-section-comment-toolbar-user-btn friends-non-add-btn" aria-label="Message">
+                                    <md-tooltip md-direction="bottom">
+                                        Delete from group
+                                    </md-tooltip>
+                                    <md-icon>delete</md-icon>
+                                </md-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </md-tab>
+        </md-tabs>
+        <div layout="row" layout-padding layout-align-xs="start">
+            <div flex="50" hide-sm hide-xs layout="row" class="friends-toast">
+
+            </div>
+            <div flex="25" flex-sm="35" flex-xs="50" class="friends-list-group-input">
+                <md-input-container class="friends-list-group-input-container">
+                    <label for="groupname">Add Group</label>
+                    <input type="text" id="groupname" ng-model="friendsCtrl.groupname"/>
+                </md-input-container>
+            </div>
+            <div flex-xs="5"  class="friends-list-group-input">
+                <md-input-container>
+                    <md-button class="md-raised" style="margin-top: 12px;" ng-disabled="!friendsCtrl.groupname" ng-click="friendsCtrl.addToFriendGroups(friendsCtrl.groupname)">
+                        Add
+                    </md-button>
+                </md-input-container>
+            </div>
+        </div>
+    </div>
+
+    <div layout="column" flex-gt-lg="25" flex-lg="25" class="md-whiteframe-4dp friends-pending-section">
+        <md-tabs md-dynamic-height class="md-padding">
+            <md-tab class="all" label="Received">
+                    <div layout-padding layout-margin>
+                        <h4>Requests pending</h4>
+                        <p class="not-found-text" ng-if="friendsCtrl.pending.received.length == 0"><br><md-icon class="not-found-text" class="material-icons">error_outline</md-icon> &nbsp; No users were found.</p>
+                        <div ng-repeat="user in friendsCtrl.pending.received" style="margin-bottom: 10px;" class="friends-pending-user">
+                            <div layout="row" style="height:52px; color:lightblue; background-color: rgba(0,0,0,0.7);" class="md-whiteframe-3dp">
+                                <div flex="20" class="friends-pending-avatar">
+                                    <img style="width: 52px !important; height: 52px;" src="{{user.avatar}}"/>
+                                </div>
+                                <div  flex="60" style="height:auto;" layout="row" layout-align="start center">
+                                    <h5 flex="100" style="margin: auto 10px; display:inline-block; text-overflow: ellipsis; white-space: nowrap;
+    overflow:hidden !important;">{{user.personaname}}</h5>
+                                </div>
+                                <div class="friends-pending-profile-btn" style="padding-right:5px;" layout="row" layout-align="center center">
+                                    <md-button style="width: 35px !important; height: 35px; margin-left:10px;" ui-sref="user({id:user.userPageID})" class="comment-fab-custom md-raised md-primary md-fab md-hue-2 md-mini user-single-profile-section-comment-toolbar-user-btn" aria-label="SiteProfile">
+                                        <md-tooltip  md-direction="bottom">
+                                            Site Profile
+                                        </md-tooltip>
+                                        <md-icon>person</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                            <div class="md-whiteframe-3dp friends-pending-action-btn-container">
+                                <md-button class="md-raised friends-pending-action-btn" ng-click="friendsCtrl.acceptFriend(user)">
+                                    Accept
+                                </md-button>
+                                <md-button class="md-raised friends-pending-action-btn" ng-click="friendsCtrl.refuseRequest(user)">
+                                    Decline
+                                </md-button>
+                            </div>
+                        </div>
+                    </div>
+
+
+            </md-tab>
+            <md-tab class="all" label="Sent">
+                <div layout-padding >
+                    <h4>Requests pending</h4>
+                    <p class="not-found-text" ng-if="friendsCtrl.pending.sent.length == 0"><br><md-icon class="not-found-text" class="material-icons">error_outline</md-icon> &nbsp; No users were found.</p>
+                    <div ng-repeat="user in friendsCtrl.pending.sent" class="friends-pending-user" layout-margin>
+                        <div layout="row" style="height:52px; color:lightblue; background-color: rgba(0,0,0,0.7);" class="md-whiteframe-3dp">
+                            <div flex="20" class="friends-pending-avatar">
+                                <img style="width: 52px !important; height: 52px;" src="{{user.avatar}}"/>
+                            </div>
+                            <div flex="60" style="height:auto;" layout="row" layout-align="start center">
+                                <h5 flex="100" style="margin: auto 10px; display:inline-block; text-overflow: ellipsis; white-space: nowrap;
+    overflow:hidden !important;">{{user.personaname}}</h5>
+                            </div>
+                            <div class="friends-pending-profile-btn" style="padding-right:5px;" layout="row" layout-align="center center">
+                                <md-button style="width: 35px !important; height: 35px; margin-left:10px;" ui-sref="user({id:user.userPageID})" class="comment-fab-custom md-raised md-primary md-fab md-hue-2 md-mini user-single-profile-section-comment-toolbar-user-btn" aria-label="SiteProfile">
+                                    <md-tooltip  md-direction="bottom">
+                                        Site Profile
+                                    </md-tooltip>
+                                    <md-icon>person</md-icon>
+                                </md-button>
+                            </div>
+                        </div>
+                        <div class="md-whiteframe-3dp" >
+                            <md-button class="md-raised" ng-click="friendsCtrl.cancelRequest(user)">
+                                Cancel
+                            </md-button>
+                        </div>
+                    </div>
+                </div>
+            </md-tab>
+        </md-tabs>
+    </div>
+</div>
+<!--
+<div class="row">
+    <div class="col-xs-10 col-xs-offset-1">
+        <div class="row">
+            <div class="col-xs-7">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <input class="form-control" placeholder="Search by name"/>
+                            </div>
+                            <div class="col-xs-4">
+                                <input class="form-control" placeholder="Search by game"/>
+                            </div>
+                        </div>
+                        <div class="well friend-well" ng-repeat="friend in friendsCtrl.friends">
+                            <div class="row">
+                                <div class="col-xs-2">
+                                    <img ng-src="{{friend.avatarmedium}}"/>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>{{friend.personaname}}</h4>
+                                    <p ng-if="user.personal.country">{{friend.personal.country}}, {{friend.personal.region}}, {{friend.personal.language | joinArray}}</p>
+                                    <ul class="list-inline">
+                                        <li ng-repeat="game in friend.recentlyPlayed"><img style="width: 50%; border: 1px solid grey;" ng-src="{{game.img_logo_url}}"/></li>
+                                        <li ng-if="friend.recentlyPlayed.length == 0" class="has-not-played-recently">User has not played any games recently.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-xs-2 btn btn-info">Send Message</div>
+                                <div class="col-xs-2 btn btn-default" ng-click="friendsCtrl.removeFriend(friend)">Unfriend</div>
+
+                            </div>
+                        </div>
+                        <div class="row" ng-if="friendsCtrl.friends.length==0">
+                            <br>
+                            <div class="col-xs-5"><p class="has-not-played-recently">User has no friends.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-5">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div>
+                            &lt;!&ndash; Nav tabs &ndash;&gt;
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation"><a>Pending</a></li>
+                                <li role="presentation" class="active"><a href="#received" aria-controls="received" role="tab" data-toggle="tab">Received</a></li>
+                                <li role="presentation"><a href="#sent" aria-controls="sent" role="tab" data-toggle="tab">Sent</a></li>
+                            </ul>
+                            &lt;!&ndash; Tab panes &ndash;&gt;
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade in active" id="received">
+                                    <div class="row well" ng-repeat="user in friendsCtrl.pending.received">
+                                        <div class="col-xs-12">
+                                            <div class="row">
+                                                <div class="col-xs-2">
+                                                    <img ng-src="{{user.avatarmedium}}" fallback-src="/images/userfallback.png"/>
+                                                </div>
+                                                <div class="col-xs-10 sent-row-spacing">
+                                                    <h4>{{user.personaname}}</h4>
+                                                    <p ng-if="user.personal.country">{{user.personal.country}}, {{user.personal.region}}, {{user.personal.language | joinArray}}</p>
+                                                    <div class="row"><div class="col-xs-12"><a ng-href="{{user.profileurl}}">Steam profile</a> | <a ng-href="/user/{{user.steamid}}">Site profile</a></div></div>
+                                                    <div class="row"><div class="col-xs-12"><img style="width:25%; border: 1px solid grey;" ng-repeat="game in user.recentlyPlayed | imgfilter |limitTo:4" fallback-src="/images/fallback.jpg" ng-src="{{game.img_logo_url}}"/></div></div>
+                                                    <div class="row">
+                                                        <div class="col-xs-12">
+                                                            <button class="btn btn-info" ng-click="friendsCtrl.acceptFriend(user)">Accept</button>
+                                                            <button class="btn btn-default" ng-click="friendsCtrl.refuseRequest(user)">Delete</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row well" ng-if="friendsCtrl.pending.received.length == 0">
+                                        <div class="col-xs-12">
+                                            <div class="row">
+                                                <p class="has-not-received-any-requests">You have not received any requests</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="sent">
+                                    <div class="row well" ng-repeat="user in friendsCtrl.pending.sent">
+                                        <div class="col-xs-12">
+                                            <div class="row">
+                                                <div class="col-xs-2">
+                                                    <img ng-src="{{user.avatarmedium}}" fallback-src="/images/userfallback.png"/>
+                                                </div>
+                                                <div class="col-xs-10 sent-row-spacing">
+                                                    <h4>{{user.personaname}}</h4>
+                                                    <p ng-if="user.personal.country">{{user.personal.country}}, {{user.personal.region}}, {{user.personal.language | joinArray}}</p>
+                                                    <div class="row"><div class="col-xs-12"><a ng-href="{{user.profileurl}}">Steam profile</a> | <a ng-href="/user/{{user.steamid}}">Site profile</a></div></div>
+                                                    <div class="row"><div class="col-xs-12"><img style="width:25%; border: 1px solid grey;" ng-repeat="game in user.recentlyPlayed | imgfilter |limitTo:4" fallback-src="/images/fallback.jpg" ng-src="{{game.img_logo_url}}"/></div></div>
+                                                    <div class="row">
+                                                        <div class="col-xs-12">
+                                                            <button class="btn btn-default" ng-click="friendsCtrl.cancelRequest(user)">Cancel Request</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row well" ng-if="friendsCtrl.pending.sent.length == 0">
+                                        <div class="col-xs-12">
+                                            <div class="row">
+                                                <p class="has-not-received-any-requests">You have not sent any requests.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+-->

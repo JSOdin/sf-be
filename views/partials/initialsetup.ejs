@@ -1,0 +1,64 @@
+<div layout="row" layout-wrap layout-margin layout-align="center">
+    <md-card flex="60" flex-lg="60" flex-md="90" flex-sm="100" flex-xs="100"layout-wrap layout-align="center">
+        <md-content layout-padding md-theme="docs-dark">
+            Step 2. Tell us about yourself (You can fill in other profile information in the account settings.)
+        </md-content>
+        <md-content layout-padding layout-margin layout="column">
+            <div layout="row" layout-sm="column" layout-xs="column" layout-align-gt-sm="space-between">
+                <md-input-container flex-gt-sm="45">
+                    <label>Country of Residence</label>
+                    <md-autocomplete class="initial-autocomplete" md-selected-item="initialsetupCtrl.selectedItemCountry" md-search-text="initialsetupCtrl.searchTextCountry" md-items="item in initialsetupCtrl.querySearch(initialsetupCtrl.searchTextCountry, initialsetupCtrl.countries)" md-item-text="item.display">
+                        <md-item-template>
+                            <span md-highlight-text="initialsetupCtrl.searchTextCountry" md-highlight-flags="^i">{{item.display}}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            Country not found.
+                        </md-not-found>
+                    </md-autocomplete>
+                </md-input-container>
+                <md-input-container flex-gt-sm="45">
+                    <label>Preferred Language</label>
+                    <md-autocomplete class="initial-autocomplete" md-selected-item="initialsetupCtrl.selectedItemLanguage" md-search-text="initialsetupCtrl.searchTextLanguage" md-items="item in initialsetupCtrl.querySearch(initialsetupCtrl.searchTextLanguage, initialsetupCtrl.languages)" md-item-text="item.display">
+                        <md-item-template>
+                            <span md-highlight-text="initialsetupCtrl.searchTextLanguage" md-highlight-flags="^i">{{item.display}}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            Language not found.
+                        </md-not-found>
+                    </md-autocomplete>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-sm="column" layout-xs="column" layout-align-gt-sm="space-between">
+                <md-input-container flex-gt-sm="45">
+                    <label>Region</label>
+                    <md-select ng-model="initialsetupCtrl.region">
+                        <md-option ng-repeat="region in initialsetupCtrl.regions" ng-value="region.value">{{region.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex-gt-sm="45">
+                    <label>Birthdate</label>
+                    <input style="margin-top:8px;" ng-model="initialsetupCtrl.birthdate"  placeholder="mm/dd/yyyy" required/>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-sm="column" layout-xs="column" layout-align-gt-sm="space-between">
+                <md-input-container flex-gt-sm="45">
+                    <label>Method of communication</label>
+                    <md-select ng-model="initialsetupCtrl.communication">
+                        <md-option ng-repeat="communication in initialsetupCtrl.communications" ng-value="communication.value">{{communication.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex-gt-sm="45" layout-align="space-between">
+                    <label>Gender</label>
+                    <md-select ng-model="initialsetupCtrl.gender">
+                        <md-option ng-repeat="gender in initialsetupCtrl.genders" ng-value="gender.value">{{gender.display}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-sm="column" layout-align="end">
+                <md-input-container style="margin-bottom: 0;" flex-gt-sm="50" layout="row" layout-align="end end" layout-margin>
+                    <md-button class="md-raised" flex="30" ng-click="initialsetupCtrl.submitAndGoNext()">Go Next</md-button>
+                </md-input-container>
+            </div>
+        </md-content>
+    </md-card>
+</div>

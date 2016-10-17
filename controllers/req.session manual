@@ -1,0 +1,12 @@
+REQ.SESSION
+
+    lastUserPageID : most recently accessed last user, used for pagination
+    firstUserPageID : very first user ID, used to disable pagination btn on client
+    veryLastUSerPageID : very last user ID, used to disable pagination btn on client
+    passport : object used in steam auth. only contains steamid
+    gamePageNum : records the most recently accessed game page.
+    firstInBatch : first ID of the user in a batch of 15. used in pagination
+    rawSearchConditions : search query conditions as soon as they hit the server. before any processing has occured
+    searchterm : caches the various search term for games page (pageup pagedown displayall, etc . index.js)
+    gameQueryTerm : game search term used for finding users
+    lastSearchGameless : if the last form query was done without a game term. helps in game termless pagination

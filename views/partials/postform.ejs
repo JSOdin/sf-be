@@ -1,0 +1,198 @@
+<div layout-gt-md="row" layout-align-gt-md="center" class="wants-form-wrap" >
+    <div flex-gt-lg="90" flex-lg="90" layout-gt-md="row" layout-align="center">
+        <div flex-gt-lg="65" flex-lg="65" layout-margin class="md-whiteframe-9dp user-posts" layout="column" layout-margin layout-padding>
+            <h3>Make a post</h3>
+            <div layout="row" ng-if="postCtrl.loggedin">
+                <p flex="60">This member's post will be saved so you can bump the post to be seen in the front page, or edit your post later. If you've previously made posts as a guest using the same steamID as your account, your latest post made as a guest will be replaced with the new post in this form.</p>
+            </div>
+            <div layout="row" ng-if="!postCtrl.loggedin">
+                <p flex="60">Posts made by guests (non-logged in users) cannot be bumped without a unique key. To bump your post as a guest, go to "manage my post" on the Posts page. You can make as many posts as you'd like as a guest.</p>
+            </div>
+            <md-content class="md-padding" layout="column" ng-if="!postCtrl.minimizeState">
+                <h2 class="" ng-if="!postCtrl.loggedin">Alias<span style="color:red;"> * required</span></h2>
+                <div layout="row" ng-if="!postCtrl.loggedin">
+                    <input flex="30" type="text" class="user-posts-input" ng-model="postCtrl.alias"/>
+                </div>
+                <h2 class="">Games you want to play<span class="helper-text">(select up to three)</span><span style="color:red;"> * required</span></h2>
+                <md-chips ng-model="postCtrl.selectedGames" md-autocomplete-snap="" md-transform-chip="postCtrl.transformChip($chip)" md-require-match="postCtrl.autocompleteDemoRequireMatch" md-on-add="postCtrl.addCount('game')" md-on-remove="postCtrl.deleteCount('game')" placeholder="All">
+                    <md-autocomplete md-selected-item="postCtrl.selectedItemGame" md-search-text="postCtrl.searchTextGame" md-items="item in postCtrl.querySearch(postCtrl.searchTextGame, postCtrl.games)" md-item-text="item.display" placeholder="Type and select item" ng-disabled="(postCtrl.chipCount['game']== 3)" >
+                        <span md-highlight-text="postCtrl.searchTextGame">{{item.display}}</span>
+                    </md-autocomplete>
+
+                    <md-chip-template>
+                        <span>
+                          <strong>{{$chip.display}}</strong>
+                            <!--       <em>({{$chip.type}})</em>-->
+                        </span>
+                    </md-chip-template>
+                </md-chips>
+                <h2 class="">Communication preferences<span class="helper-text">(select up to three)</span></h2>
+                <md-chips ng-model="postCtrl.selectedCommunications" md-autocomplete-snap="" md-transform-chip="postCtrl.transformChip($chip)" md-require-match="postCtrl.autocompleteDemoRequireMatch" md-on-add="postCtrl.addCount('communication')" md-on-remove="postCtrl.deleteCount('communication')" placeholder="All">
+                    <md-autocomplete md-selected-item="postCtrl.selectedItemCommunication" md-search-text="postCtrl.searchTextCommunication" md-items="item in postCtrl.querySearch(postCtrl.searchTextCommunication, postCtrl.communications)" md-item-text="item.display" placeholder="Type and select item" ng-disabled="(postCtrl.chipCount['communication']== 3)" >
+                        <span md-highlight-text="postCtrl.searchTextCommunication">{{item.display}}</span>
+                    </md-autocomplete>
+
+                    <md-chip-template>
+                        <span>
+                          <strong>{{$chip.display}}</strong>
+                            <!--       <em>({{$chip.type}})</em>-->
+                        </span>
+                    </md-chip-template>
+                </md-chips>
+
+                <h2 class="">Post text<span style="color:red;"> * required</span></h2>
+                <div layout="row">
+                    <textarea flex="60" type="text" class="user-posts-input" ng-model="postCtrl.posttext" placeholder="Introduce yourself and say what you are looking for"></textarea>
+                </div>
+                <h2 class="">64-bit SteamID <span class="helper-text">(usually 17 or 18 digits - for ex. 76561197961033824)</span><span style="color:red;"> * required</span></h2>
+                <div layout="row">
+                    <input flex="30" type="text" class="user-posts-input" ng-model="postCtrl.steamid" ng-disabled="postCtrl.hasSteamID"/>
+                </div>
+                <h2 class="">Birthdate</h2>
+                <div layout="row">
+                    <input flex="30" type="text" class="user-posts-input" ng-model="postCtrl.birthdate" ng-disabled="postCtrl.hasBirthdate" placeholder="mm/dd/yyyy"/>
+                </div>
+                <div layout="row">
+                    <div flex="30">
+                        <h2 class="">Language <span class="helper-text">(type and select from dropdown)</span></h2>
+                        <md-autocomplete md-selected-item="postCtrl.selectedItemLanguage" md-search-text="postCtrl.searchTextLanguage" md-items="item in postCtrl.querySearch(postCtrl.searchTextLanguage, postCtrl.languages)" md-item-text="item.display" ng-disabled="postCtrl.hasLanguage" class="user-posts-form-autocomplete" md-min-length="0">
+                            <md-item-template>
+                                <span md-highlight-text="postCtrl.searchTextLanguage" md-highlight-flags="^i">{{item.display}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                Language not found.
+                            </md-not-found>
+                        </md-autocomplete>
+                    </div>
+                    <div flex="30">
+                        <h2 class="">Region <span class="helper-text">(type and select from dropdown)</span></h2>
+                        <md-autocomplete md-selected-item="postCtrl.selectedItemRegion" md-search-text="postCtrl.searchTextRegion" md-items="item in postCtrl.querySearch(postCtrl.searchTextRegion, postCtrl.regions)" md-item-text="item.display" ng-disabled="postCtrl.hasRegion" class="user-posts-form-autocomplete" md-min-length="0">
+                            <md-item-template>
+                                <span md-highlight-text="postCtrl.searchTextRegion" md-highlight-flags="^i">{{item.display}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                Region not found.
+                            </md-not-found>
+                        </md-autocomplete>
+                    </div>
+                    <div flex="30">
+                        <h2 class="">Country <span class="helper-text">(type and select from dropdown)</span></h2>
+                        <md-autocomplete md-selected-item="postCtrl.selectedItemCountry" md-search-text="postCtrl.searchTextCountry" md-items="item in postCtrl.querySearch(postCtrl.searchTextCountry, postCtrl.countries)" md-item-text="item.display" ng-disabled="postCtrl.hasCountry" class="user-posts-form-autocomplete" md-min-length="0">
+                            <md-item-template>
+                                <span md-highlight-text="postCtrl.searchTextCountry" md-highlight-flags="^i">{{item.display}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                Country not found.
+                            </md-not-found>
+                        </md-autocomplete>
+                    </div>
+                </div>
+                <div layout="row">
+                    <div flex="33">
+                        <h2 class="">Gender</h2>
+                        <md-select ng-model="postCtrl.gender" ng-disabled="postCtrl.hasGender" class="user-posts-form-select">
+                             <md-option value="male" selected >
+                                 Male
+                             </md-option>
+                            <md-option value="female" >
+                                Female
+                            </md-option>
+                        </md-select>
+                    </div>
+                </div>
+
+                <!-- new -->
+
+                <div layout="column" style="margin-bottom: 10px;"  ng-if="postCtrl.selectedGames.length !== 0">
+                    <h2 class="">Say what your game specific preferences are<span> - (Click on a game to reveal additional options)</span></h2>
+
+                    <!--       <div layout="row" ng-if="!wantsCtrl.stateGameFields">
+                               <md-button class="md-raised" ng-click="wantsCtrl.toggleGameFields()">Show</md-button>
+                           </div>
+                           <div layout="row" ng-if="wantsCtrl.stateGameFields">
+                               <md-button class="md-raised" ng-click="wantsCtrl.toggleGameFields()">Hide</md-button>
+                           </div>-->
+
+
+                    <div layout="column" class="user-posts-game-specific-fields">
+                        <div layout="column" ng-repeat="game in postCtrl.selectedGames | allFilter" layout-align="space-between" >
+
+                            <label for="{{game.appid+'dropdown'}}"><h4 class="user-posts-game-specific-fields-h4" style="width: 30%;"><md-icon>add</md-icon><input class="game-fields-dropdown" type="checkbox" id="{{game.appid+'dropdown'}}" ng-model="postCtrl[game.appid]"/> {{game.display}}</h4></label>
+                            <div layout="column" layout-wrap class="user-posts-game-specific-fields-input-wrapper" ng-if="postCtrl[game.appid]">
+                                <div ng-repeat="(key,array) in game.fields" layout="column"> <!-- fieldoptions or fields if fieldoptions doesnt exist (usually when selecting a new game not in post.-->
+                                    <h2>{{key}}<span> - (You can select multiple options)</span></h2>
+                                    <md-select ng-model="postCtrl.selectedGameFields[game.appid][key]" class="user-posts-form-select" multiple="true">
+                                        <md-tooltip>
+                                            Selected options are highlighted.
+                                        </md-tooltip>
+                                        <md-option ng-repeat="option in array" value="{{option}}" }}">
+                                            {{option}}
+                                        </md-option>
+                                    </md-select>
+                                </div>
+                                <h2>Attitude<span> - (You can select multiple options)</span></h2>
+                                <md-select ng-model="postCtrl.selectedGameFields[game.appid]['Attitude']" class="user-posts-form-select" multiple="true">
+                                    <md-tooltip>
+                                        Selected options are highlighted.
+                                    </md-tooltip>
+                                    <md-option ng-repeat="option in ['I mess around in game and do random things to have fun','I am focused on learning the game and constantly improving myself to succeed','I expect those around me to try their best']" value="{{option}}" >
+                                        {{option}}
+                                    </md-option>
+                                </md-select>
+                                <h2>Skill Level<span> - (Select one)</span></h2>
+                                <md-select ng-model="postCtrl.selectedGameFields[game.appid]['Skill Level']" class="user-posts-form-select">
+                                    <md-tooltip>
+                                        Selected options are highlighted.
+                                    </md-tooltip>
+                                    <md-option ng-repeat="option in ['I just started playing or I\'m still trying to grasp basics of the game','I\'ve played for a while and am familiar with the game but still have much to improve on','I consider myself a veteran','I\'m an expert at the game']" value="{{option}}" >
+                                        {{option}}
+                                    </md-option>
+                                </md-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- new end -->
+
+
+                <div layout="column">
+                    <md-checkbox class="user-posts-checkbox" ng-model="postCtrl.allowReddit">
+                        Allow users to contact me via reddit.
+                    </md-checkbox>
+                    <div layout="row" ng-if="postCtrl.allowReddit">
+                        <input flex="30" type="text" ng-model="postCtrl.reddit" class="user-posts-input" placeholder="Enter your reddit username"/>
+                    </div>
+                 </div>
+                <div layout="row" layout-align="start" style="margin-top:15px;">
+                    <div flex="100" id="g-recaptcha" on-create="setwidgetId(widgetId)" recaptcha key="'6LfkLBYTAAAAAKCsb0DxW-pHs8lHedb6OPa__SSW'"></div>
+                </div>
+             <!--   <div layout="column" style="margin-top: 15px;">
+                    <md-checkbox class="user-posts-checkbox" ng-model="postCtrl.allowEmail">
+                        Allow users to contact me via Email
+                    </md-checkbox>
+                    <div layout="row" ng-if="postCtrl.allowEmail">
+                        <input flex="30" type="email" ng-model="postCtrl.email" class="user-posts-input" placeholder="ex. johndoe@gmail.com"/>
+                    </div>
+                </div>-->
+                <div layout="column" style="margin-top: 15px;" ng-if="!postCtrl.loggedin">
+                    <!--<md-checkbox class="user-posts-checkbox" ng-model="postCtrl.allowPasscode">
+                        Make a passcode to bump the post later.
+                    </md-checkbox>-->
+                    <h2>Unique post key <span style="color:red;">(Do not lose it or you can't bump your post!)</span></h2>
+                    <div class="user-posts-uniquekey">
+                        <p style="color:royalblue;">{{postCtrl.guid}}</p>
+                    </div>
+                  <!--  <div layout="row" ng-if="postCtrl.allowPasscode">
+                        <input flex="30" type="text" ng-model="postCtrl.passcode" class="user-posts-input" placeholder="ex. WjRWJEF640"/>
+                    </div>-->
+                </div>
+                <div layout="row" layout-align="space-between">
+                    <div class="user-posts-toast" >
+
+                    </div>
+                    <md-button class="md-raised" ng-click="postCtrl.submitPost()">Submit</md-button>
+                </div>
+        </div>
+    </div>
+</div>

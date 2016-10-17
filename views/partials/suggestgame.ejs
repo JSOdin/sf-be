@@ -1,0 +1,10 @@
+<form>
+    <div layout="column" layout-padding layout-margin class="message-window-form-container">
+        <h3>Suggest a game</h3>
+        <label class="message-window-body-label">Game Name</label>
+        <input required class="message-window-input" ng-model="msgCtrl.gamename" style="padding-left:6px;" placeholder="Game Name"/>
+        <label class="message-window-body-label">Some Information about the game</label>
+        <textarea class="message-window-textarea" ng-model="msgCtrl.extrainfo" placeholder="Any detail that helps us determine exactly which game you want added to the list" style="padding-left:6px;" required></textarea>
+        <div layout="row" layout-align="end"><md-button class="md-raised md-button" flex="20" ng-click="msgCtrl.sendSuggestion(msgCtrl.gamename, msgCtrl.extrainfo)">Send</md-button></div>
+    </div>
+</form>

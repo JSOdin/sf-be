@@ -1,0 +1,472 @@
+var mongoose = require('mongoose');
+var async = require('async');
+
+var userCtrl = (function(){
+
+
+
+
+    function fetchusers(Model,req, res){
+        var page, query, term;
+        if (req.params.term) {
+
+            if (req.session.hasOwnProperty('rawSearchConditions')){
+                if (Object.keys(req.session.rawSearchConditions).length > 0){
+                    console.log('it  will enter now');
+                    return parseAndQuery(Model,{$lte:req.session.lastUserPageID},req,res,'recallLastPage')
+                }
+            }
+            query = Model.find({$or: [{'recentlyPlayed.name': req.params.term}, {'ownedGames.name': req.params.term}]}).sort({userPageID:1}).lean().limit(15);
+
+            return query.exec(function (err, users) {
+                req.session.gameQueryTerm = req.params.term;  // comes in handy when paginating
+                if (users.length > 0) {
+                    req.session.gameQueryTerm= req.params.term;  // comes in handy when paginating
+                    req.session.firstUserPageID = users[0].userPageID;      // first ever user
+                    req.session.lastUserPageID = users[users.length-1].userPageID; // last of the batch
+                    users[0].firstUserPageID = req.session.firstUserPageID;
+
+                    if (users.length < 15){
+                        req.session.veryLastUserPageID = users[users.length-1].userPageID;
+                        users[0].veryLastUserPageID = req.session.veryLastUserPageID;
+                    }
+                    return req.session.save(function(){
+                        return res.send(users);
+                    })
+
+                } else {
+                    return res.status(400).send('users not found');
+                }
+            })
+        }
+        if (req.session.hasOwnProperty('rawSearchConditions')){
+            if (Object.keys(req.session.rawSearchConditions).length > 0){
+                console.log('it  will enter now');
+                return parseAndQuery(Model,{$lte:req.session.lastUserPageID},req,res,'recallLastPage')
+            }
+        }
+
+        /** no term query on website load **/
+
+        query = Model.find().sort({userPageID:1}).lean().limit(15);
+        return query.exec(function (err, users) {
+
+            if (users.length > 0) {
+                if (users.length < 15){
+                    users[0].veryLastUserPageID = users[users.length-1].userPageID;
+                }
+                req.session.rawSearchConditions = {};                                                                       // need to reset raw search cache b/c if it exists it gets caught in parseAndQuery and errors
+                req.session.gameQueryTerm ='';
+                req.session.lastUserPageID = users[users.length - 1].userPageID;
+
+                req.session.firstUserPageID = users[0].userPageID;
+
+                users[0].firstUserPageID = req.session.firstUserPageID;            // send off the first ID for disabling pagination btn
+
+
+                users[0].userPageNum = req.session.userPageNum = 1;
+
+                return req.session.save(function(){
+                    return res.send(users);
+                })
+            }
+        });
+    }
+
+    /**
+
+    1. fetchusers - first, the users are sent by default upon site load
+    2. searchbyformgetbatch - contrary to name this is also the logic that handles no-form pagination
+    3. formDataParse - this handles form data and parses it into a format that works with mongoose/mongodb
+    4. serchbyform - handles queries via form.
+
+     **/
+
+    function formDataParser(conditions,req,res){
+        var i, j, k,
+            dbcondition = {
+                '$and':[]
+            },insertitem;
+
+        if (Object.keys(conditions).length == 0){
+            return {};
+        }
+
+        if (conditions.gameterm){                               // if we are searching for users within a game (with a form)
+            req.session.gameQueryTerm= conditions.gameterm;     // we save the term to session before deleting
+            var game = {};
+            game.term = conditions.gameterm;                    // save by value, not reference
+            delete conditions.gameterm;                         // then delete it because it will cause problems later
+        }
+
+        for (i in conditions){                                                                              // we need to loop through each of the object levels
+            if (conditions.hasOwnProperty(i) && conditions[i] == Object(conditions[i])){                    // at each level we check for object or string
+                for (j in conditions[i]){
+                    if (conditions[i].hasOwnProperty[j] && conditions[i][j] == Object(conditions[i][j])){
+                        for (k in conditions[i][j]){
+                            if (Array.isArray(conditions[i][j][k])){                                        // stop arrays from being processed. specifically 'personal.agerange'
+                                return
+                            }
+                            insertitem={};
+                            insertitem[i+'.'+j+'.'+'k'] = conditions[i][j][k];
+                            dbcondition['$and'].push(insertitem);                                           // insert at the outermost level
+                        }
+                    } else {
+                        insertitem={};
+                        insertitem[i+'.'+j] = conditions[i][j];
+                        dbcondition['$and'].push(insertitem);                                               // insert at the outermost level
+                    }
+                }
+            } else {
+                insertitem={};
+                insertitem[i] = conditions[i];
+                dbcondition['$and'].push(insertitem);                                                       // insert at the outermost level
+            }
+        }
+
+        /*Object.keys(conditions).forEach(function(ea){           // we need to loop through each of the object levels
+            if (typeof conditions[ea]== "object"){              // at each level we check for object or string
+                Object.keys(conditions[ea]).forEach(function(each){
+                    if (typeof conditions[ea][each] == "object"){
+                        Object.keys(conditions[ea][each]).forEach(function(item){
+                            if (Array.isArray(conditions[ea][each])){               // stop arrays from being processed. specifically 'personal.agerange'
+                                return;
+                            }
+                            insertitem={};                                             // insert at the outermost level
+                            insertitem[ea+'.'+each+'.'+item] = conditions[ea][each][item];
+                            dbcondition['$and'].push(insertitem);
+                        })
+                    } else {
+                        insertitem={};
+                        insertitem[ea+'.'+each] = conditions[ea][each];
+                        dbcondition['$and'].push(insertitem);
+                    }
+                });
+            } else {
+                insertitem={};
+                insertitem[ea] = conditions[ea];
+                dbcondition['$and'].push(insertitem);
+            }
+        });*/
+
+        if (game){
+            dbcondition['$and'].push({$or:[{'recentlyPlayed.name':game.term},{'ownedGames.name':game.term}]})
+        }
+
+
+        if (/*req.body.personal ||*/ conditions.personal){                                                                         // construct a date query condition. need to separate it from the main because of the array.
+            var personal,agerange;
+
+         /*   if (req.body.personal){
+                personal = req.body.personal;
+                agerange = req.body.personal.agerange;
+            }*/
+
+           /* if (conditions.personal){*/
+                personal = conditions.personal;
+                agerange = conditions.personal.agerange;
+           /* }*/
+
+            if (personal.hasOwnProperty('agerange')){
+                if (agerange.length == 1){
+                    dbcondition['$and'].push({'personal.birthdate':{'$lte':new Date(agerange[0])}});            //35 years or older
+                } else {
+                    dbcondition['$and'].push({'personal.birthdate':{'$and':[{'$gte': new Date(agerange[0]),'$lte':new Date(agerange[1])}]}});
+                }
+            }
+        }
+
+
+        if (dbcondition['$and'].length == 1){                                                   // $and operator wont work with only one item.
+            dbcondition = dbcondition['$and'][0];
+        }
+        req.session.save();
+
+        return dbcondition;
+    }
+
+
+    function searchByForm(Model, req,res){
+        /** used for both game and game-less queries. getting the first page before any pagination calls **/
+
+        var query,conditions,dbcondition;
+
+        conditions = req.body;
+
+        req.session.rawSearchConditions = Object.keys(conditions).length > 0? conditions : req.session.rawSearchConditions;// save raw formdata to re-display on hthe form on reload and also used for pagination.
+
+
+        /** below we parse the body into a form that can fit mongoose **/
+
+        dbcondition = formDataParser(req.session.rawSearchConditions,req);
+
+        /** end parsing **/
+
+        query = Model.find(dbcondition).sort({userPageID:1}).lean().limit(15);
+
+        return query.exec(function(err,docs){
+            if (docs) {
+                if (docs.length > 0) {
+                    req.session.firstUserPageID = docs[0].userPageID; // first ever for the search
+
+                    req.session.lastUserPageID = docs[docs.length - 1].userPageID;    // for up pagination on server
+                    req.session.firstInBatch = docs[0].userPageID;              //for down pagination on server
+
+                    docs[0].firstUserPageID = req.session.firstUserPageID;
+
+                    if (docs.length < 15){
+                        docs[0].veryLastUserPageID = docs[docs.length-1].userPageID;
+                    }
+                    return req.session.save(function(){
+                        return res.json(docs);
+                    })
+
+                }
+            }
+            req.session.rawSearchConditions = {};                       // clean search results cache if nothind found.
+            return req.session.save(function(){
+                return res.status(400).send('users not found');
+            })
+
+        })
+    }
+
+    function parseAndQuery(Model,IDquery,req,res, direction) {
+        var query,dbcondition;
+        if (req.session.lastUserPageID) {
+            if (Object.keys(req.session.rawSearchConditions).length > 0) {      // when we are paginating a form query
+                console.log(req.session.rawSearchConditions)
+                dbcondition = formDataParser(req.session.rawSearchConditions,req);
+                if (dbcondition.hasOwnProperty('$and')){
+                    dbcondition['$and'].push({
+                        userPageID: IDquery
+                    });
+
+                    if (req.session.gameQueryTerm){
+                        dbcondition['$and'].push({$or:[{'recentlyPlayed.name':req.session.gameQueryTerm},{'ownedGames.name':req.session.gameQueryTerm}]})
+                    }
+                } else {                            // here we know theres only one item in the '$and' arr
+                    var objcopy = {};
+
+                    objcopy['$and'] = [dbcondition]; //
+                    objcopy['$and'].push({
+                        userPageID: IDquery
+                    });
+
+                    if (req.session.gameQueryTerm){
+                        objcopy['$and'].push({$or:[{'recentlyPlayed.name':req.session.gameQueryTerm},{'ownedGames.name':req.session.gameQueryTerm}]})
+                    }
+
+                    dbcondition=objcopy;        // we replace the old dbcondition with new
+                }
+
+
+            } else {
+                dbcondition = {                     // when we are paginating a blank query (site load)
+                    userPageID:  IDquery
+                };
+                if (req.session.gameQueryTerm){
+                    dbcondition = {
+                        '$and':[{$or:[{'recentlyPlayed.name':req.session.gameQueryTerm},{'ownedGames.name':req.session.gameQueryTerm}]},{userPageID: IDquery}]
+                    }
+                }
+            }
+            console.log(dbcondition);
+            if (direction == 'next'){
+                query = Model.find(dbcondition).sort({userPageID: 1}).lean().limit(15);
+            } else if (direction == 'recallLastPage') {
+                query = Model.find(dbcondition).sort({userPageID: -1}).lean().limit(15);
+            } else {
+                    query = Model.find(dbcondition).sort({userPageID: -1}).lean().limit(15);  /** for downwards pagination have to reverse the order of results **/
+
+            }
+
+            return query.exec(function (err, docs) {
+                console.log('wtf?')
+                if (docs) {
+
+                    console.log('hello any docs??'+docs);
+                    if (docs.length > 0) {
+                        if (direction == 'next'){
+
+                            req.session.lastUserPageID = docs[docs.length - 1].userPageID;  // last user accessed
+                            req.session.firstInBatch = docs[0].userPageID;                 // first user only in that batch
+
+                            docs[0].firstUserPageID = req.session.firstUserPageID;  // first ever user. send on each request to allow for button checking
+
+                            if (docs.length < 15){                                  // less than 15 results means last ever page.
+                                req.session.veryLastUserPageID = docs[docs.length-1].userPageID;
+                                docs[0].veryLastUserPageID =  req.session.veryLastUserPageID;
+                            }
+                            return req.session.save(function(){
+                                return res.json(docs);
+                            })
+                        } else if (direction=='previous') {
+                            req.session.lastUserPageID = docs[0].userPageID;  // last user accessed (first element due to reversing)
+                            req.session.firstInBatch =  docs[docs.length - 1].userPageID;          // first user only in that batch (last element due to reversing)
+
+
+                            docs.sort(function(a,b){
+                                return a.userPageID - b.userPageID;
+                            });
+
+                            docs[0].firstUserPageID = req.session.firstUserPageID;  // first ever user. send on each request to allow for button checking
+
+
+
+                            return req.session.save(function(){
+                                return res.json(docs);
+                            })
+                        } else {
+
+
+                            docs.sort(function(a,b){
+                                return a.userPageID - b.userPageID;
+                            });
+
+                            docs[0].firstUserPageID = req.session.firstUserPageID;  // first ever user. send on each request to allow for button checking
+
+                            return res.json(docs);
+
+                        }
+
+
+                    } else {
+                        return req.session.save(function(){
+                            return res.status(400).send('users not found');
+                        })
+                    }
+                } else {
+                    return req.session.save(function(){
+                        return res.status(400).send('users not found');
+                    })
+
+                }
+            });
+
+        }
+    }
+
+    function searchByFormGetBatch(Model, req,res){
+        if (req.params.action == 'next') {
+            parseAndQuery(Model,{$gt: req.session.lastUserPageID},req,res, req.params.action);
+        } else if (req.params.action == 'previous'){
+            parseAndQuery(Model,{$lt: req.session.firstInBatch},req,res, req.params.action);
+        }
+    }
+
+    function updatesettings(Model,req,res){
+     /*   Model.update({steamid:req.params.steamid},{'personal.language':req.body.personal.language},{new:true},function(err,doc){
+            console.log(doc);
+            return res.send('update saved');
+        });*/
+
+        Model.findOne({steamid:req.params.steamid},function(err,doc){
+            console.log(req.body);
+
+            doc.personal.language = req.body.personal.language;
+            doc.personal.country = req.body.personal.country;
+            doc.personal.communication = req.body.personal.communication;
+
+            doc.general.region = req.body.general.region;
+            doc.general.time = req.body.general.time;
+            doc.general.intent = req.body.general.intent;
+            doc.general.introduction = req.body.general.introduction;
+
+            doc.dota = req.body.dota;
+            doc.csgo = req.body.csgo;
+
+          /*  doc.dota.serverregion = req.body.dota.serverregion;
+            doc.dota.position = req.body.dota.position;
+            doc.dota.rank.solommr = req.body.dota.rank.solommr;
+            doc.dota.rank.partymmr = req.body.dota.rank.partymmr;
+            doc.dota.mode = req.body.dota.mode;
+
+            doc.csgo.mode = req.body.csgo.mode;
+            doc.csgo.rank = req.body.csgo.rank;
+            doc.csgo.role = req.body.csgo.csgorole;
+            doc.csgo.team = req.body.csgo.team;
+            doc.csgo.howlong = req.body.csgo.howlong;*/
+
+            if (!doc.settings.user){
+                doc.settings.user = {};
+            }
+            doc.settings.user.addSteamSetting = req.body.settings.user.addSteamSetting;
+            doc.settings.user.msgOnSiteSetting = req.body.settings.user.msgOnSiteSetting;
+            doc.settings.user.profilePrivacy = req.body.settings.user.profilePrivacy;
+            doc.settings.user.noDisplayStats = req.body.settings.user.noDisplayStats;
+            doc.settings.user.noDisplayLinks = req.body.settings.user.noDisplayLinks;
+
+
+            doc.save(function(err){
+                if (err){
+                    console.log(err);
+                }
+                return res.send('doc saved');
+            })
+        })
+    }
+
+
+
+
+
+
+    function fetchuser(Model,req,res){
+        if (req.params.pageid=='thisuser') {
+            return res.json(req.user);
+        } else {
+            Model.findOne({userPageID: req.params.pageid},function(err,doc){
+                if (doc){
+                    return res.send(doc);
+                } else {
+                    return res.status(400).send('User not found');
+                }
+
+            });
+        }
+    }
+
+    function sendGameSuggestion(Model,req,res){
+        var suggestion = new Model({
+            name: req.body.gamename,
+            details: req.body.details
+        });
+        suggestion.save(function(){
+            res.send('suggestion saved');
+        })
+    }
+
+    function blockuser(Model,req,res){
+        Model.update({steamid:req.user.steamid},{$push:{blocked:req.params.steamid}},function(err){
+            if (err){
+                return res.status(400).send('failed');
+            }
+
+            return res.status(200).send('ok')
+        });
+    }
+
+    function unblockuser(Model,req,res){
+        Model.update({steamid:req.user.steamid},{$pull:{blocked:req.params.steamid}},function(err){
+            if (err){
+                return res.status(400).send('failed');
+            }
+
+            return res.status(200).send('ok')
+        })
+    }
+
+    return {
+        fetchuser: fetchuser,
+        fetchusers: fetchusers,
+        searchbyform: searchByForm,
+        searchbyformnextbatch: searchByFormGetBatch,
+        updatesettings: updatesettings,
+        sendgamesuggestion:sendGameSuggestion,
+        blockuser: blockuser,
+        unblockuser: unblockuser
+    }
+})();
+
+module.exports = userCtrl;

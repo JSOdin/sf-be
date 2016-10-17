@@ -1,0 +1,233 @@
+<!--local -->
+<!DOCTYPE html>
+<html ng-app="myapp" ng-cloak>
+<head lang="en">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" class="metadescrip" content="Steam Friends is a platform that helps you easily search for new friends to play games with. Make a post, or look through the users directory.">
+  <meta name="fragment" content="!">
+  <meta name="msvalidate.01" content="B5851BDD0D036BA797084167956CB67D" />
+  <meta property="og:url"           content="https://steamfriends.net" />
+  <meta property="og:type"          content="website" />
+  <meta property="og:title"         content="Search Steam users for your favorite games" />
+  <meta property="og:description"   content="Steam Friends is a platform that helps you easily search for new users to play with. Filter by game name, and various user criteria." />
+  <meta property="og:image"         content="https://steamfriends.net/images/banner.jpg" />
+  <meta property="fb:app_id" content="659548270853016"/>
+  <title id="main-title" ng-bind="title">Steam Friends - Find The Perfect Gaming Buddy</title>
+  <!--- ** development only ** -->
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+  <!-- /  development only  /-->
+
+  <!-- production-->
+ <!--   <link rel="stylesheet" href="/compress/app.css" type="text/css"/>-->
+  <link rel="stylesheet" href="/assets/css/style.css" type="text/css"/>
+  <!-- production-->
+
+  <base href="/">
+
+</head>
+<body ng-cloak>
+<div class="overlay" ng-if="overlaytrigger" ng-click="hideOverlay()"></div>
+<div id="fb-root"></div>
+<script>
+
+</script>
+<% if (user){%>
+
+<navbar loggedin="<%= loggedin %>"></navbar>
+<% } else { %>
+
+<navbar loggedin="<%= loggedin %>" ></navbar>
+<%}%>
+
+<menu loggedin="<%= loggedin %>" ng-hide="['how','privatesettings','initialsetup','profilesetup'].indexOf($state.current.name)>=0"></menu>
+
+<ui-view></ui-view>
+
+
+
+<div class="content-spacer">
+
+</div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- userpoststop -->
+<div>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3088381454752155"
+         data-ad-slot="5523936425"
+         data-ad-format="auto"></ins>
+</div>
+
+<script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<md-toolbar class="md-whiteframe-4dp site-footer" ng-controller="contactusController as cntCtrl">
+    <div layout="row" layout-align="center">
+        <div layout="column" flex-xs="90" flex-sm="90" flex-md="80" flex="65" layout-wrap layout-align="center">
+            <div layout-gt-lg="row" layout-lg="row" layout-md="">
+                <div layout="column" class="footer-resource-links navigation-links" >
+                    <h3>Navigation</h3>
+                    <ul class="inline-list" >
+                        <li class="exclude-from-margin">
+                            <ul>
+                                <li><a href="/">Home and FAQ</a></li>
+                                <li><a href="/steam-friends-privacy-policy">Privacy Policy</a></li>
+                                <li><a href="/steam-friends-disclaimer">Disclaimer</a></li>
+                                <li><a href="/steam-friends-contact-us">Contact Us</a></li>
+                                <li><a href="/steam-friends-about-us">About</a></li>
+                            </ul>
+                        </li>
+                        <li class="exclude-from-margin">
+                            <ul>
+                                <li><a href="/find-steam-games">Games</a></li>
+                                <li><a href="/find-steam-friends">Users</a></li>
+                                <li><a href="https://twitter.com/steamfriends_" target="_blank">Twitter</a></li>
+                                <li><a href="https://www.facebook.com/dotarage" target="_blank">Facebook</a>
+                                <li><a href="http://steamcommunity.com/groups/FindSteamFriends" target="_blank">Steam group</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div layout="column" class="site-footer-divider-wrapper">
+                    <div layout="column" class="site-footer-divider" flex="100">
+
+                    </div>
+                </div>
+                <div layout="column" class="footer-resource-links resources" flex-md="50">
+                    <h3>Resources</h3>
+                    <ul class="list-container-li">
+                        <li><a href="http://steamgifts.com" target="_blank">Steamgifts - Game giveaways from the community</a></li>
+                        <li><a href="https://steamdb.info" target="_blank">Steamdb - Comprehensive database of all Steam games</a></li>
+                        <li><a href="https://steamcompanion.com" target="_blank">SteamCompanion - Various tools for your account</a></li>
+                        <li><a href="http://dota2lounge.com" target="_blank">Dota2lounge - Virtual Item betting for Dota2 matches</a></li>
+                        <li><a href="http://pcgamingwiki.com" target="_blank">PCGamingWiki - An encyclopedia of PC game fixes</a></li>
+                    </ul>
+                    <h3 hide-lg hide-gt-lg>Partners</h3>
+                    <ul hide-lg hide-gt-lg class="list-container-li">
+                        <li><a href="http://cheapshark.com" target="_blank">CheapShark - The best price comparison tool for digital PC game downloads</a></li>
+                    </ul>
+                </div>
+                <div layout="column" class="site-footer-divider-wrapper" hide-md>
+                    <div layout="column" class="site-footer-divider" flex="100">
+
+                    </div>
+                </div>
+                <div layout="column" class="footer-resource-links resources" flex="30" hide-md hide-sm hide-xs>
+                    <h3>Partners</h3>
+                    <ul class="list-container-li">
+                       <li><a href="http://cheapshark.com" target="_blank">CheapShark - The best price comparison tool for PC games</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div layout="row" class="site-footer-text" layout-align="center">
+        <div layout="column" flex-xs="90" flex-sm="90" flex-md="80" flex-lg="65" layout-wrap>
+            <div layout="row">
+                SteamFriends is not affiliated with Valve. All game names, characters and all other content in game are properties of respective game publishers. <a href=" http://steampowered.com">Powered By Steam</a>
+            </div>
+        </div>
+    </div>
+</md-toolbar>
+
+<script src="/assets/vendor/jquery/jquery-1.11.3.js"></script>
+<script src="/assets/vendor/angular/core/angular-1.4.6.js"></script>
+<script src="/assets/vendor/angular/ui.router/angular-ui-router.js"></script>
+<script src="/assets/vendor/angular/resource/angular-resource.js"></script>
+<script src="/assets/vendor/angular/angular-animate/angular-animate.js"></script>
+<script src="/assets/vendor/angular/aria/angular-aria.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.js"></script>
+
+<!--
+
+<script src="/compress/app.js"></script>
+-->
+
+
+
+
+<script src="/app/app.js"></script>
+<script src="/filters/playerNumberFilter.js"></script>
+<script src="/filters/joinArray.js"></script>
+<script src="/filters/excludeOwnUserList.js"></script>
+<script src="/filters/imgFilter.js"></script>
+<script src="/filters/startFrom.js"></script>
+<script src="/filters/filterAgeByRange.js"></script>
+<script src="/filters/filterGender.js"></script>
+<script src="/filters/timeAgoFilter.js"></script>
+<script src="/filters/formatAgo.js"></script>
+<script src="filters/orderByLastMsg.js"></script>
+<script src="/filters/orderBySubmitted.js"></script>
+<script src="/filters/noticeMessage.js"></script>
+<script src="/filters/ageFilter.js"></script>
+<script src="/filters/allFilter.js"></script>
+<script src="/services/gameResource.js"></script>
+<script src="/services/usersResource.js"></script>
+<script src="/services/userResource.js"></script>
+<script src="/services/friendsService.js"></script>
+<script src="/services/userStore.js"></script>
+<script src="/services/selectmethods.js"></script>
+<script src="/services/selectoptions.js"></script>
+<script src="/services/dialogService.js"></script>
+<script src="/services/toastService.js"></script>
+<script src="/services/modalService.js"></script>
+<script src="/services/settingsService.js"></script>
+<script src="/services/postService.js"></script>
+<script src="/services/paginationCache.js"></script>
+<!--<script src="/services/FBChecker.js"></script>-->
+<script src="/directives/navbar.js"></script>
+<script src="/directives/gamePanel.js"></script>
+<script src="/directives/userPanel.js"></script>
+<script src="/directives/menu.js"></script>
+<script src="/directives/searchform.js"></script>
+<script src="/directives/usersPagination.js"></script>
+<Script src="/directives/usersCtrlDelegate.js"></Script>
+<script src="/directives/fallbackSrc.js"></script>
+<script src="/directives/captchaDirective.js"></script>
+<script src="/filters/noticeMessage.js"></script>
+<script src="/controllers/gameCtrl.js"></script>
+<script src="/controllers/usersCtrl.js"></script>
+<script src="/controllers/userCtrl.js"></script>
+<script src="/controllers/signupCtrl.js"></script>
+<script src="/controllers/friendsCtrl.js"></script>
+<script src="/controllers/initialsetupCtrl.js"></script>
+<script src="/controllers/convoCtrl.js"></script>
+<script src="/controllers/sconvoCtrl.js"></script>
+<script src="/controllers/messageCtrl.js"></script>
+<script src="/controllers/settingsCtrl.js"></script>
+<script src="/controllers/signupprivCtrl.js"></script>
+<script src="/controllers/notificationCtrl.js"></script>
+<script src="/controllers/contactusController.js"></script>
+<script src="/controllers/howtoController.js"></script>
+<script src="/controllers/quickmatchCtrl.js"></script>
+<script src="/controllers/wantstoplayCtrl.js"></script>
+<script src="/controllers/managepostCtrl.js"></script>
+
+<script src="/controllers/postCtrl.js"></script>
+<script src="/controllers/cmsCtrl.js"></script>
+<script src="/controllers/singlepostCtrl.js"></script>
+<script src="/directives/opacity.js"></script>
+<script src="/directives/pagination.js"></script>
+<script src="/directives/gamesCtrlDelegate.js"></script>
+<script src="/directives/spinnerOnLoad.js"></script>
+<script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script>
+
+<!--<script type="text/javascript">
+
+</script>-->
+
+
+<!--<script src="/directives/activeClass.js"></script>-->
+
+</body>
+</html>
+

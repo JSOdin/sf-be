@@ -1,0 +1,233 @@
+<br>
+<div layout="row" layout-align="center" style="margin-bottom: 25px;">
+    <div flex-gt-lg="70" flex-lg="80" flex-md="80" flex-sm="100" flex-xs="90" layout="row" layout-sm="row" layout-xs="column" layout-align="center" layout-sm-align="start center" >
+        <div flex-gt-lg="20" flex-md="25" flex-sm="30" class="md-whiteframe-5dp user-single-profile-left-box-wrapper" layout="column" layout-align="start" >
+           <img class="user-single-profile-left-box-avatar" ng-src="{{userCtrl.user.avatarfull || '/images/fallbackavatar.jpg'}}"  hide-xs/>
+           <md-button class="md-raised md-accent user-single-profile-left-box-button1" layout="row" ng-if="userCtrl.canAddOnSteam" ng-if="userCtrl.canAddOnSteam" ng-click="userCtrl.addOnSteam(userCtrl.user.addfriendurl,$event)"><md-icon>person_add</md-icon>&nbsp;&nbsp;&nbsp;&nbsp; Add on Steam</md-button>
+           <md-button class="md-raised user-single-profile-left-box-button2" ng-if="!userCtrl.cancel && !userCtrl.friend" ng-click="userCtrl.addFriend(userCtrl.user,$event)"><md-icon class="icon-plus"></md-icon>&nbsp;&nbsp;&nbsp;&nbsp; Add Friend</md-button>
+           <md-button class="md-raised user-single-profile-left-box-button2" style="background-color: rgb(0,150,136); color: white;" ng-if="userCtrl.cancel" ng-click="userCtrl.cancelAddFriend(userCtrl.user)"><md-icon style="color:white;">clear</md-icon>&nbsp;&nbsp;&nbsp;&nbsp; Cancel Request </md-button>
+           <md-button class="md-raised user-single-profile-left-box-button2" style="background-color: rgb(0,150,136); color: white;" ng-if="userCtrl.friend" disabled><md-icon style="color:white;">check</md-icon>&nbsp;&nbsp;&nbsp;&nbsp; Friend </md-button>
+           <md-button class="md-raised user-single-profile-left-box-button3" ng-if="userCtrl.canMsgOnSite" ng-click="userCtrl.openMsgForm($event)"><md-icon class="icon-paper-plane"></md-icon>&nbsp;&nbsp;&nbsp;&nbsp; Message</md-button>
+           <md-button class="md-raised user-single-profile-left-box-button3" ng-click="userCtrl.removeFriend(userCtrl.user)" ng-if="userCtrl.friend"><md-icon>cancel</md-icon>&nbsp;&nbsp;&nbsp;&nbsp; Delete Friend</md-button>
+           <md-button class="md-raised user-single-profile-left-box-button3" ng-click="userCtrl.blockUser(userCtrl.user)" ng-if="!userCtrl.blocked"><md-icon>warning</md-icon>&nbsp;&nbsp;&nbsp;&nbsp; Block User</md-button>
+           <md-button class="md-raised user-single-profile-left-box-button3" ng-click="userCtrl.unblockUser(userCtrl.user)" ng-if="userCtrl.blocked" style="background-color: rgb(0,150,136); color: white;"><md-icon style="color:white;" >warning</md-icon>&nbsp;&nbsp;&nbsp;&nbsp; Unblock User</md-button>
+           <md-button class="md-raised user-single-profile-left-box-button4" ng-click="userCtrl.reportUser(userCtrl.user)"><md-icon>report</md-icon>&nbsp;&nbsp;&nbsp;&nbsp; Report User</md-button>
+       </div>
+       <md-content flex-gt-lg="70" flex-lg="60" flex-md="60" flex-sm="65" class="md-whiteframe-5dp user-single-profile-top-toolbar-wrapper" style="margin-left: 10px;">
+           <div layout="row" layout-align="center" class="md-whiteframe-3dp user-single-profile-top-toolbar"  layout-padding>
+               <div flex="100">
+                   <h4 class="user-single-profile-top-toolbar-personaname">{{userCtrl.user.personaname}}</h4>
+                   <p class="user-single-profile-top-toolbar-personalinfo"><span>{{userCtrl.user.age}} {{userCtrl.user.personal.gender}} &middot; </span><span>{{userCtrl.user.personal.country}} &middot; </span><span>{{userCtrl.user.general.region}} &middot; </span><span>{{userCtrl.user.personal.language}}</span></p>
+                   <div layout="row">
+                       <md-button ng-if="userCtrl.canAddOnSteam" href="http://steamcommunity.com/profiles/{{userCtrl.user.steamid}}" class="md-fab md-raised md-primary md-mini md-hue-1" aria-label="Dotabuff">
+                           <md-tooltip  md-direction="bottom">
+                               Steam Profile
+                           </md-tooltip>
+                           <md-icon  class="icon-steam2 user-single-profile-top-toolbar-steamicon2" ></md-icon>
+                       </md-button>
+                       <md-button  ng-if="userCtrl.hasDota && !userCtrl.user.settings.user.noDisplayLinks" href="http://dotabuff.com/players/{{userCtrl.user.steamid}}" class="md-raised md-fab md-primary md-mini user-single-profile-top-toolbar-fab" aria-label="Dotabuff">
+                           <md-tooltip  md-direction="bottom">
+                               Dotabuff
+                           </md-tooltip>
+                           Dota
+                       </md-button>
+                       <md-button ng-if="userCtrl.hasCSGO && !userCtrl.user.settings.user.noDisplayLinks" href="http://csgo-stats.com/{{userCtrl.user.steamid}}" class="md-raised md-accent md-fab md-mini user-single-profile-top-toolbar-fab" aria-label="Steam">
+                           <md-tooltip  md-direction="bottom">
+                               CSGOStats
+                           </md-tooltip>
+                           CS
+                       </md-button>
+                       <div layout="row" flex="20" layout-align="end">
+                            <div  class="user-toast">
+
+                            </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+           <div flex="100" layout-align="center" layout="row" layout-margin>
+               <h4 flex="95" class="user-single-profile-section-header">General</h4>
+           </div>
+           <div flex="100" layout-align="center" layout="row" layout-margin>
+               <div flex="95"><h5 class="user-single-profile-section-subheader">Introduction</h5>
+               <p class="user-single-profile-section-text-missing" style="color: darkorange;" ng-if="!userCtrl.user.general.introduction">User has not written an introduction.</p>
+               <p class="user-single-profile-section-text">{{userCtrl.user.general.introduction}}</p></div>
+           </div>
+
+
+           <div flex="100" layout-align="center" layout="row" layout-margin>
+               <div flex="95">
+                   <h5 class="user-single-profile-section-subheader">Availability</h5>
+                   <p class="user-single-profile-section-text-missing" style="color: darkorange;" ng-if="!userCtrl.user.general.time">User has not written this section.</p>
+                   <p class="user-single-profile-section-text">{{userCtrl.user.general.time}}</p>
+               </div>
+           </div>
+           <div flex="100" layout-align="center" layout="row" layout-margin>
+               <div flex="95"><h5 class="user-single-profile-section-subheader">What are you looking for?</h5>
+                   <p class="user-single-profile-section-text-missing" style="color: darkorange;" ng-if="!userCtrl.user.general.intent">User has not written this section.</p>
+               <p class="user-single-profile-section-text">{{userCtrl.user.general.intent}}</p></div>
+           </div>
+           <div flex="100" layout-align="center" layout="row" layout-margin>
+               <div flex="95"><h5 class="user-single-profile-section-subheader">Preferred Method of Communication</h5>
+                   <p class="user-single-profile-section-text-missing" style="color: darkorange;" ng-if="!userCtrl.user.personal.communication">User has not written this section.</p>
+               <p class="user-single-profile-section-text">{{userCtrl.user.personal.communication}}</p></div>
+           </div>
+           <div flex="100" layout-align="center" layout="row" layout-margin>
+               <div flex="95"><h5 class="user-single-profile-section-subheader">Recently Played Games</h5>
+               <p class="user-single-profile-section-text-missing" style="color: darkorange;" ng-if="!(userCtrl.user.recentlyPlayed.length > 0)">User has not played any games recently.</p>
+               <div class="user-single-profile-section-recentlyplayed-wrapper">
+                   <img class="user-single-profile-section-recentlyplayed"  fallback-src="/images/fallback.jpg"  ng-src="{{each.img_logo_url}}" ng-repeat="each in userCtrl.user.recentlyPlayed"/>
+               </div></div>
+           </div>
+           <md-divider></md-divider>
+           <div flex="100" layout="column" ng-if="userCtrl.hasDota">
+               <div flex="100" layout-align="center" layout="row" layout-margin>
+                   <h4 flex="95" class="user-single-profile-section-header">Dota Profile</h4>
+               </div>
+               <div layout="row" layout-margin layout-align="start">
+                   <div layout-lg="row" layout-gt-lg="row" layout-md="column" layout-sm="column" layout-xs="column"  class="user-single-profile-section-dota-stats" layout-margin flex="90">
+                       <div flex-gt-md="40" layout="column" ng-if="userCtrl.user.settings.user.noDisplayStats">
+                           <h6 class="user-single-profile-section-dota-subheader">MMR</h6>
+                           <p class="user-single-profile-section-mmr-text" layout-padding><md-icon>warning</md-icon> User has opted to not display his mmr.</p>
+                       </div>
+                       <div flex-gt-md="20" layout="column" ng-if="!userCtrl.user.settings.user.noDisplayStats">
+                           <h6  class="user-single-profile-section-dota-subheader">Solo MMR</h6>
+                           <p class="user-single-profile-section-mmr-text" layout-padding>{{userCtrl.user.dota.rank.solommr || "Not Available"}}</p>
+                       </div>
+                       <div flex-gt-md="20" layout="column" ng-if="!userCtrl.user.settings.user.noDisplayStats">
+                           <h6 class="user-single-profile-section-dota-subheader">Party MMR</h6>
+                           <p class="user-single-profile-section-mmr-text" layout-padding>{{userCtrl.user.dota.rank.partymmr || "Not Available"}}</p>
+                       </div>
+                       <div flex-gt-md="20" layout="column">
+                           <h6 class="user-single-profile-section-dota-subheader">Most Played Position</h6>
+                           <p class="user-single-profile-section-text">{{userCtrl.user.dota.position || "Not Available"}}</p>
+                       </div>
+                       <div flex-gt-md="20" layout="column">
+                           <h6 class="user-single-profile-section-dota-subheader">Server Region</h6>
+                           <p class="user-single-profile-section-text">{{userCtrl.user.dota.serverregion || "Not Available"}}</p>
+                       </div>
+                   </div>
+               </div>
+               <div layout="row"  layout-margin layout-align="center"><div layout="row" flex="95">
+                   <div layout="column" class="user-single-profile-section-dota-mode">
+                       <h6 class="user-single-profile-section-dota-subheader" style="margin-top: -5px;">Preferred Game Mode</h6>
+                       <p class="user-single-profile-section-text">{{userCtrl.user.dota.mode|| "Not Available"}}</p>
+                   </div>
+               </div>
+               </div>
+           </div>
+           <md-divider ng-if="userCtrl.hasDota"></md-divider>
+
+
+           <div flex="100" layout="column" ng-if="userCtrl.hasCSGO">
+               <div flex="100" layout-align="center" layout="row" layout-margin>
+                   <h4 flex="95" class="user-single-profile-section-header">CSGO Profile</h4>
+               </div>
+               <div layout="row" layout-align="start" layout-margin>
+                   <div layout-gt-sm="row" layout-md="column" layout-sm="column" layout-xs="column" flex="95" flex-md="40" flex-sm="40">
+                       <div flex-gt-md="40" ng-if="userCtrl.user.settings.user.noDisplayStats" style="margin-right: 10px;">
+                           <h6 class="user-single-profile-section-dota-subheader">League Rank</h6>
+                           <p class="user-single-profile-section-mmr-text" layout-padding><md-icon>warning</md-icon> User has opted to not display his rank.</p>
+                       </div>
+                       <div flex-gt-md="30" layout="column" ng-if="!userCtrl.user.settings.user.noDisplayStats" style="margin-right: 10px;">
+                           <h6 class="user-single-profile-section-csgo-subheader">League Rank</h6>
+                           <img class="user-single-profile-section-csgo-rank" ng-src="{{userCtrl.rankURL}}"/>
+                           <md-tooltip>
+                               {{userCtrl.user.csgo.rank}}
+                           </md-tooltip>
+                       </div>
+                       <div flex-gt-md="25" class="user-single-profile-section-csgo-column" layout="column">
+                           <h6 class="user-single-profile-section-csgo-subheader">Preferred Game Mode</h6>
+                           <p class="user-single-profile-section-text">{{userCtrl.user.csgo.mode || "Not Available"}}</p>
+                       </div>
+                       <div flex-gt-md="25" class="user-single-profile-section-csgo-column" layout="column">
+                           <h6 class="user-single-profile-section-csgo-subheader">Preferred Role</h6>
+                           <p class="user-single-profile-section-text">{{userCtrl.user.csgo.role || "Not Available"}}</p>
+                       </div>
+                   </div>
+               </div>
+               <div layout="row" layout-align="center"  layout-margin>
+                   <div flex="95" layout="row">
+                       <div flex="30" layout="column">
+                           <h6 class="user-single-profile-section-csgo-subheader" style="margin-top: -5px;">Experience</h6>
+                           <p class="user-single-profile-section-text">{{userCtrl.user.csgo.howlong || "Not Available"}}</p>
+                       </div>
+                   </div>
+               </div>
+           </div>
+          <!-- <md-divider ng-if="userCtrl.hasCSGO"></md-divider>
+           <div layout="row" layout-align="center">
+               <div flex="95">
+                   <div layout="row" layout-align><h4 flex="95" class="user-single-profile-section-header">Owned games</h4></div>
+                   <br>
+                   <div layout="row">
+                       <md-input-container flex="50" flex-sm="100" flex-md="100" md-no-float class="md-block">
+                           <md-icon>zoom_in</md-icon>
+                           <input type="text" placeholder="Search Owned Games" ng-model="search">
+                       </md-input-container>
+                   </div>
+                   <div class="user-single-profile-section-ownedgames-wrapper">
+                       <img class="user-single-profile-section-ownedgames" fallback-src="/images/fallback.jpg" ng-src="{{each.img_logo_url}}" ng-repeat="each in userCtrl.user.ownedGames|filter:search|limitTo:50"/>
+                   </div>
+               </div>
+           </div>-->
+
+           <div layout="column" >
+               <div layout-align="center" layout="row">
+                   <h4 flex="95" class="user-single-profile-section-header">Comments</h4>
+               </div>
+               <div class="user-single-profile-section-comment-wrapper" ng-repeat="comment in userCtrl.user.comments | orderBySubmitted">
+                   <div layout="row" layout-align="center">
+                       <div layout="row" layout-align="center center" flex="95"  class="md-whiteframe-3dp user-single-profile-section-comment-toolbar" style="height:54px;">
+                           <div flex="10" flex-xs="20" flex-sm="20" flex-md="20" style="background-color: rgba(0,0,0,0.7);">
+                               <img class="user-single-profile-section-comment-toolbar-avatar" ng-src="{{comment.avatarmedium}}"/>
+                           </div>
+                           <div layout="row" class="user-single-profile-section-comment-toolbar-user" flex="90" flex-sm="80" flex-md="80" layout-align="start center" style="height:54px;" >
+                               <h5 class="user-single-profile-section-comment-toolbar-user-username" style="max-width: 30%;" ui-sref="user({id:comment.authorpageid})">{{comment.author}}</h5>
+                               <p class="user-single-profile-section-comment-toolbar-user-ago" hide-sm hide-md hide-xs>
+                                   {{comment | formatAgo}}
+                               </p>
+
+                               <md-button ng-click="userCtrl.goToState(comment,$event)" class="comment-fab-custom md-raised md-primary md-fab md-hue-2 md-mini user-single-profile-section-comment-toolbar-user-btn" aria-label="SiteProfile">
+                                   <md-tooltip  md-direction="bottom">
+                                       Site Profile
+                                   </md-tooltip>
+                                   <md-icon>person</md-icon>
+                               </md-button>
+                               <md-button ng-click="userCtrl.openMsgForm($event,comment)" class="md-raised md-fab md-mini md-accent md-hue-2 user-single-profile-section-comment-toolbar-user-btn" aria-label="Message">
+                                   <md-tooltip  md-direction="bottom">
+                                       Message
+                                   </md-tooltip>
+                                   <md-icon class="icon-mail3"></md-icon>
+                               </md-button>
+
+                           </div>
+                       </div>
+                   </div>
+                   <div layout="row" layout-align="center">
+                       <p flex="95"  class="md-whiteframe-5dp user-single-profile-section-comment-comment" layout-padding>
+                           {{comment.comment}}
+                       </p>
+                   </div>
+               </div>
+
+
+               <div layout="column" layout-padding layout-margin class="user-single-profile-section-comment-form-wrapper" ng-if="!userCtrl.sentcomment">
+                   <h4>Write a comment</h4>
+
+                    <textarea class="user-single-profile-section-comment-textarea"  ng-model="userCtrl.body"></textarea>
+                   <div layout="row" layout-align="end"><md-button class="md-raised md-button" flex="20" ng-click="userCtrl.sendComment(userCtrl.body, $event)">Send</md-button></div>
+               </div>
+
+               <div layout="row" class="user-single-profile-section-comment-sentnotify-wrapper" layout-align="center" ng-if="userCtrl.sentcomment">
+                   <div flex="95" class="md-whiteframe-7dp user-single-profile-section-comment-sentnotify" layout-padding>
+                       <md-button class="md-button md-raised" ng-click="userCtrl.closeNotice()">
+                           <md-icon>clear</md-icon>
+                       </md-button>
+                       <h4 class="user-single-profile-ection-comment-sentnotify-header"> Comment sent!</h4>
+                   </div>
+               </div>
+           </div>
+       </md-content>
+   </div>
+</div>

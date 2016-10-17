@@ -1,0 +1,26 @@
+<div layout="row" layout-align="center" ng-if="!cmsCtrl.openpanel">
+    <div flex="35" class="md-whiteframe-7dp" layout-margin >
+        <input ng-model="cmsCtrl.user"/>
+        <input ng-model="cmsCtrl.pass"/>
+        <md-button ng-click="cmsCtrl.submit()" class="md-raised">submit</md-button>
+    </div>
+</div>
+<div layout="row" layout-align="center" ng-if="cmsCtrl.openpanel">
+    <div flex="65" class="md-whiteframe-7dp" layout="column" layout-margin>
+        <label>
+            appid
+        </label>
+        <input ng-model="cmsCtrl.appid"/>
+
+        <label>
+            field
+        </label>
+        <input ng-model="cmsCtrl.fieldname"/>
+
+        <label>
+            values
+        </label>
+        <input ng-model="cmsCtrl.values"/>
+        <md-button ng-click="cmsCtrl.submitdata()">Write values</md-button>
+    </div>
+</div>

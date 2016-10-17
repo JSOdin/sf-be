@@ -1,0 +1,55 @@
+<div layout="row" layout-align="center">                                               <!-- TODO pick a better place for toast -->
+    <div flex="25" class="users-toast"></div>
+</div>
+<div layout="row" layout-align="center" style="margin-top: 35px; margin-bottom: 35px;">
+    <div style="" layout="row" flex-xl="50" flex-lg="60" flex-md="70" flex-sm="80" flex-xs="100" layout-align="center">
+        <div layout="column" class="md-padding md-whiteframe-4dp" style="background-color: white;" flex-gt-lg="65" flex-lg="65" flex-md="65" flex-sm="100">
+            <div layout="row" layout-align="center">
+                <h1 style="text-align:center;">Quick Matchmaking</h1>
+            </div>
+            <div layout="row" layout-align="center">
+                <img ng-src="{{QMCtrl.avatarUrl}}"/>
+            </div>
+            <div layout="row" layout-align="center">
+                <p flex="70" flex-xs="80" flex-md="80">Select a game. Find your gaming match with the click of a single button.  Your profile will be matched with other Steam users based on the information you have provided for us.</p>
+            </div>
+            <div layout="row" layout-align="center" class="qcm-autocomplete-container">
+                <md-input-container flex-xl="70" flex-lg="65" flex-md="80" flex-sm="70" flex-xs="90"><label>Input a game name and select from the dropdown.</label><md-autocomplete  md-selected-item="QMCtrl.selectedItemGame"  md-search-text="searchTextGame" md-items="item in QMCtrl.querySearch(searchTextGame)" md-autofocus="true" md-item-text="item.name" ng-model-options="{debounce:200}" class="qcm-autocomplete">
+                        <md-item-template>
+                            <span md-highlight-text="searchTextGame" md-highlight-flags="^i">{{item.name}}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            No games found.
+                        </md-not-found>
+                    </md-autocomplete></md-input-container>
+            </div>
+            <div layout="row" layout-align="center">
+                <md-button class="md-raised md-primary" ng-click="QMCtrl.quickMatch(searchTextGame)">Get your Matches</md-button>
+                <!--<md-button class="md-raised" style="background-color: rgb(226, 42, 81); color:white;" ng-click="QMCtrl.quickMatch(searchTextGame)">Match my Recently Played Games</md-button>-->
+            </div>
+            <div layout="column" id="quickusers">
+                <div layout="row" ng-repeat="user in QMCtrl.users" class="md-padding" layout-align="space-between center">
+                    <div layout="row">
+                        <img ng-src="{{user.avatarmedium}}"/>
+                        <div layout="column">
+                            <h5 class="qcm-personaname" style="" ng-click="QMCtrl.goToProfile(user.userPageID,$event)">{{user.personaname}}</h5>
+                            <p class="qcm-personalinfo user-card-country-language"><span ng-if="user.personal.country">{{user.personal.country}} &middot;</span><span ng-if="user.personal.birthdate|| user.personal.gender"> {{user.age}} {{user.personal.gender}} </span><span ng-if="user.personal.language"> &middot; {{user.personal.language}}</span>
+                            </p>
+                        </div>
+
+                    </div>
+                    <div layout="row" layout-align="center center" style="height:20px;">
+                        <h5 style="color:limegreen; margin-left: 15px;">Online</h5>
+                        <md-button  aria-label="..." class="md-accent md-raised" layout="row" layout-align="center center" ng-click="QMCtrl.addOnSteam(user.addfriendurl,$event)" ><md-icon class="icon-steam2"></md-icon>
+                            <md-tooltip>Add on steam</md-tooltip>
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="md-padding" ng-if="QMCtrl.users.length == 0">
+                    <p class="not-found-text" ><br><md-icon class="not-found-text" class="material-icons">error_outline</md-icon> &nbsp; No users were found for this game.</p>
+                </div>
+            </div>
+        </div>
+     </div>
+</div>
+

@@ -1,0 +1,110 @@
+<div layout="row" layout-align="center">
+    <div layout="column" class="md-whiteframe-5dp jumbotron" flex-gt-lg="60" flex-lg="60" flex-md="80" flex-sm="80" flex-xs="100">
+            <!--<div  class="giveaway-banner">
+                <p style="padding-left: 15px; color: rgba(255,255,255,0.7);"><a href="/giveaway">This week's game giveaway: Skyrim</a> <md-icon class="icon-arrow-right"></md-icon> <a class="giveaway-banner-link" href="/giveaway">(Details here)</a></p>
+            </div>-->
+
+        <h1 class="how-to-header" style="margin-bottom:0; font-family: 'Roboto',sans-serif;">Steam Friends Matchmaker</h1>
+        <p style="text-align:center; color: rgba(255,255,255,0.4);">Find the right Steam friend without the randomness.</p>
+        <div layout="row" layout-align="center">
+            <md-button class="jumbotron-btn md-whiteframe-3dp jumbotron-1st-btn" href="/steam-user-posts">
+                <div layout="column" layout-align="start">
+                    <md-icon>pageview</md-icon>
+                    <p>Browse user posts</p>
+                </div>
+            </md-button>
+            <md-button class="jumbotron-btn md-whiteframe-3dp 2ndbtn" href="/manage-post" ng-show="howCtrl.loggedin">
+                <div layout="column" layout-align="start">
+                    <md-icon>create</md-icon>
+                    <p>Manage your post</p>
+                </div>
+            </md-button>
+            <md-button class="jumbotron-btn md-whiteframe-3dp 2ndbtn" href="/submit-a-post" ng-show="!howCtrl.loggedin">
+                <div layout="column" layout-align="start">
+                    <md-icon>create</md-icon>
+                    <p>Create your own post</p>
+                </div>
+            </md-button>
+            <md-button class="jumbotron-btn md-whiteframe-3dp" href="/find-steam-games">
+                <div layout="column" layout-align="start">
+                    <md-icon>view_list</md-icon>
+                    <p> Search the users directory</p>
+                </div>
+            </md-button>
+            <md-button class="jumbotron-btn md-whiteframe-3dp" href="https://discord.gg/0oKBMW47C5bOIiRk" target="_blank">
+                <div layout="column" layout-align="start">
+                    <md-icon>headset_mic</md-icon>
+                    <p>Join our Discord channel</p>
+                </div>
+            </md-button>
+        </div>
+        <!--<div layout="row" layout-xs="column" layout-align="center center">
+
+
+            <div flex-gt-xs="25"  layout="column" layout-align="center center">
+                <md-icon class="icon-steam2 how-to-icon" ></md-icon>
+                <h3 class="how-to-header3" >Login via Steam</h3>
+            </div>
+            <div flex="10" layout-align="center center">
+                <i class="material-icons private-settings-arrow icon-arrow_forward" hide-xs hide-sm></i>
+            </div>
+            <div flex-gt-xs="25"  layout="column" layout-align="center center">
+                <md-icon class="how-to-icon how-to-icon icon-search"></md-icon>
+                <h3 class="how-to-header3" >Search for your game</h3>
+            </div>
+            <div flex="10" layout-align="center center">
+                <i class="material-icons private-settings-arrow icon-arrow_forward" hide-xs hide-sm></i>
+            </div>
+            <div flex-gt-xs="25"  layout="column" layout-align="center center">
+                <md-icon class="how-to-icon icon-users"></md-icon>
+                <h3 class="how-to-header3" >Find a new friend using the form</h3>
+            </div>
+        </div>
+        <div layout="row" layout-align="center" class="how-to-search-button">
+            &lt;!&ndash;<div flex="20" layout-align="center" ng-if="!howCtrl.loggedin">
+                <form action="/auth/steam" method="POST">
+                    <input style="display:block; margin:0 auto;" class="login-btn" name="submit" type="image" src="/images/steamlogin2.png"/>
+                </form>
+                <h3 style="text-align:center; color:rgb(0,150,136);">Get started !</h3>
+            </div>&ndash;&gt;
+            <div flex="40" layout="row" layout-align="center">
+                <a href="/steam-user-posts"><md-button class="md-raised md-primary">Find a friend</md-button></a>
+            </div>
+        </div>-->
+    </div>
+</div>
+
+<div layout="row" layout-align="center" class="how-to-faq-section" >
+
+        <div layout="column" class="md-padding md-whiteframe-4dp"  flex-gt-lg="40" flex-lg="40" flex-md="60" flex-sm="80" flex-xs="100" layout-align="center">
+
+            <h5 class="how-to-faq-header">
+                <md-icon class="icon-check-square"></md-icon>&nbsp; FAQ
+            </h5>
+            <h6 class="how-to-faq-header-h6">
+                <md-icon class="icon-arrow_forward"></md-icon> Who is this site for?
+            </h6>
+            <p>
+                This site is for Steam users who want to find peers that play the same games as they do, enjoy doing similar things while in game, and have similar goals.
+            </p>
+            <h6 class="how-to-faq-header-h6">
+                <md-icon class="icon-arrow_forward"></md-icon>  What can I do on this site?
+            </h6>
+            <p>
+                Log in via Steam, look through the user posts or directory and see who matches you the best. Message a user on reddit, or add directly to your Steam friends list. Or make your own post.
+            </p>
+            <h6 class="how-to-faq-header-h6">
+                <md-icon class="icon-arrow_forward"></md-icon> What is a user post?
+            </h6>
+            <p>
+                A user post is a "Looking for friend" type of message that shows what kind of player you are, what games you play, and what you are looking for in a gaming buddy.
+            </p>
+            <h6 class="how-to-faq-header-h6">
+                <md-icon class="icon-arrow_forward"></md-icon> Do you have to be logged in with your Steam account to make a post?
+            </h6>
+            <p>
+                You can make a post without logging in. However you'll have to provide your 64-bit numeric SteamID and you won't be able to edit your post.
+            </p>
+        </div>
+
+</div>

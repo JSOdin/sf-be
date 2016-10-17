@@ -1,0 +1,10 @@
+<form>
+    <div layout="column" layout-padding layout-margin class="message-window-form-container">
+        <h3>Write a Message to {{msgCtrl.recipient}}</h3>
+        <label class="message-window-subject-label">Subject</label>
+        <input required class="message-window-input" ng-model="msgCtrl.subject"/>
+        <label class="message-window-body-label">Body</label>
+        <textarea class="message-window-textarea" ng-model="msgCtrl.body" required></textarea>
+        <div layout="row" layout-align="end"><md-button class="md-raised md-button" flex="20" ng-click="msgCtrl.sendMessage(msgCtrl.subject, msgCtrl.body)">Send</md-button></div>
+    </div>
+</form>

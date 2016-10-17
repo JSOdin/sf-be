@@ -1,0 +1,42 @@
+
+<div layout="row" layout-align="center">
+    <div flex="20" offset="5" class="convo-toast">
+
+    </div>
+</div>
+<div layout="row" layout-align="center">
+    <md-card layout="column" class="md-whiteframe-3dp" flex-gt-lg="50" flex-lg="60" flex-md="80" flex-sm="90" >
+        <md-toolbar layout-padding class="conversation-header">
+            <div layout="row" layout-align="space-between">
+                <h4>Notifications</h4>
+
+            </div>
+        </md-toolbar>
+        <div layout="column" layout-padding layout-margin>
+            <div layout="row">
+                <div flex="70" flex-sm="30">
+                    <h5 style="margin-top:0; margin-bottom:0; color:rgba(0,0,0,0.5)">System Message</h5>
+                </div>
+                <div flex="20">
+                    <h5 style="margin-top:0; margin-bottom:0;  color:rgba(0,0,0,0.5)">Time</h5>
+                </div>
+            </div>
+            <div ng-repeat="notice in notificationCtrl.notices | orderBySubmitted track by $index" class="conversation-list-content">
+                <div  layout="row">
+                    <div flex="70" flex-sm="30">
+                        <p><a class="conversation-profile-link" ui-sref="{{notice.noticetype == 'comment' ? 'user({id:notificationCtrl.yourprofile})' : 'friends'}}" flex>{{notice.user.personaname}} {{notice.noticetype | noticemessage}}</a></p>
+                    </div>
+                    <div flex="25">
+                        <p class="conversation-time-ago">{{notice.time | formatAgo}}</p>
+                    </div>
+                </div>
+                <md-divider ng-if="notificationCtrl.notices.length > 1 && $index != (notificationCtrl.notices.length - 1)"></md-divider>
+
+            </div>
+            <div layout="row">
+                <p class="not-found-text" ng-if="notificationCtrl.notices.length == 0 || !notificationCtrl.notices"><br><md-icon class="not-found-text" class="material-icons">error_outline</md-icon> &nbsp; There are no notices..</p>
+            </div>
+        </div>
+    </md-card>
+</div>
+
