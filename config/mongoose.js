@@ -1,9 +1,6 @@
 var mongoose = require('mongoose');
 
 module.exports =  function(){
-  /*  mongoose.connect('mongodb://admin:admin@ds035664.mongolab.com:35664/steambuddy');*/
-
-/*   var options = { server: { socketOptions: {minPoolSize:5}}};*/
     var options = {server:{poolSize: 3,socketOptions:{keepAlive:120, connectTimeoutMS: 30000}}};
     mongoose.connect('mongodb://localhost:50000/steambuddy',options);
     var db = mongoose.connection;
